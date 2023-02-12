@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "dpamvifgenerator"
+version = "0.1.0"
+description = ""
+authors = ["Robert Almendarez <r-almendarez@ti.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.11,<3.12"
+pyside6 = "^6.4.2"
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.1.0"
+flake8 = "^6.0.0"
+pre-commit = "^3.0.4"
+isort = "^5.12.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
