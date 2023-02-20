@@ -15,60 +15,7 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_3">
-    <item row="0" column="0">
-     <widget class="QGroupBox" name="groupBox">
-      <property name="title">
-       <string>Input Vendor Info File (VIF)</string>
-      </property>
-      <layout class="QGridLayout" name="gridLayout">
-       <item row="0" column="0">
-        <widget class="QLineEdit" name="lineEdit">
-         <property name="placeholderText">
-          <string>Path to an existing USB VIF XML...</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QPushButton" name="pushButton">
-         <property name="text">
-          <string>Browse...</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </item>
-    <item row="0" column="1">
-     <widget class="QGroupBox" name="groupBox_2">
-      <property name="title">
-       <string>Generated Vendor Info File (VIF)</string>
-      </property>
-      <layout class="QGridLayout" name="gridLayout_2">
-       <item row="0" column="0">
-        <widget class="QLabel" name="label">
-         <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Status&lt;/span&gt;: Nothing in Progress&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QProgressBar" name="progressBar">
-         <property name="value">
-          <number>0</number>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="2">
-        <widget class="QPushButton" name="pushButton_2">
-         <property name="text">
-          <string>Save As...</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </item>
-    <item row="1" column="0" colspan="2">
+    <item row="3" column="0" colspan="2">
      <widget class="QTabWidget" name="tabWidget">
       <property name="layoutDirection">
        <enum>Qt::LeftToRight</enum>
@@ -80,335 +27,427 @@
        <attribute name="title">
         <string>DP Source/Sink Capabilities</string>
        </attribute>
-       <widget class="QWidget" name="">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>5</y>
-          <width>761</width>
-          <height>331</height>
-         </rect>
-        </property>
-        <layout class="QGridLayout" name="gridLayout_4">
-         <item row="6" column="3">
-          <widget class="QCheckBox" name="checkBox_14">
-           <property name="text">
-            <string>C</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="1" colspan="6">
-          <widget class="QComboBox" name="comboBox_3">
-           <item>
+       <layout class="QGridLayout" name="gridLayout_6">
+        <item row="0" column="0">
+         <layout class="QGridLayout" name="gridLayout_4">
+          <item row="6" column="3">
+           <widget class="QCheckBox" name="ufpd_pin_assignment_c_checkbox">
             <property name="text">
-             <string>May be requried</string>
+             <string>C</string>
             </property>
-           </item>
-           <item>
+           </widget>
+          </item>
+          <item row="4" column="1" colspan="6">
+           <widget class="QComboBox" name="usb2_signalling_not_used_cbb">
+            <item>
+             <property name="text">
+              <string>May be requried</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Not required</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="6" column="5">
+           <widget class="QCheckBox" name="ufpd_pin_assignment_e_checkbox">
             <property name="text">
-             <string>Not required</string>
+             <string>E</string>
             </property>
-           </item>
-          </widget>
-         </item>
-         <item row="6" column="5">
-          <widget class="QCheckBox" name="checkBox_10">
-           <property name="text">
-            <string>E</string>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="1">
-          <widget class="QCheckBox" name="checkBox_3">
-           <property name="text">
-            <string>A</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_10">
-           <property name="text">
-            <string>Enable DP SID</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="4">
-          <widget class="QCheckBox" name="checkBox_13">
-           <property name="text">
-            <string>D</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="0">
-          <widget class="QLabel" name="label_2">
-           <property name="text">
-            <string>DP Transport Signalling</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item row="8" column="0">
-          <widget class="QLabel" name="label_7">
-           <property name="text">
-            <string>DFPD_UFPD Connected</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="2">
-          <widget class="QCheckBox" name="checkBox_9">
-           <property name="text">
-            <string>B</string>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="0">
-          <widget class="QLabel" name="label_6">
-           <property name="text">
-            <string>UFPD Pin Assignment</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="1" colspan="6">
-          <widget class="QComboBox" name="comboBox_2">
-           <item>
+           </widget>
+          </item>
+          <item row="5" column="1">
+           <widget class="QCheckBox" name="dfpd_pin_assignment_a_checkbox">
             <property name="text">
-             <string>Supports USB signalling rates and electrical specification</string>
+             <string>A</string>
             </property>
-           </item>
-           <item>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="enable_dp_sid_label">
             <property name="text">
-             <string>Supports DP signalling rates and electrical specification</string>
+             <string>Enable DP SID</string>
             </property>
-           </item>
-          </widget>
-         </item>
-         <item row="5" column="2">
-          <widget class="QCheckBox" name="checkBox_4">
-           <property name="text">
-            <string>B</string>
-           </property>
-          </widget>
-         </item>
-         <item row="7" column="0">
-          <widget class="QLabel" name="label_12">
-           <property name="text">
-            <string>Multi Function Preferred</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item row="8" column="1" colspan="6">
-          <widget class="QComboBox" name="comboBox_4">
-           <item>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="4">
+           <widget class="QCheckBox" name="ufpd_pin_assignment_d_checkbox">
             <property name="text">
-             <string>Neither UFP_D nor DFP_D is connected</string>
+             <string>D</string>
             </property>
-           </item>
-           <item>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="dp_transport_signalling_label">
             <property name="text">
-             <string>DFP_D is connected</string>
+             <string>DP Transport Signalling</string>
             </property>
-           </item>
-           <item>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="0">
+           <widget class="QLabel" name="dfpd_ufpd_connected_label">
             <property name="text">
-             <string>UFP_D is connected</string>
+             <string>DFPD_UFPD Connected</string>
             </property>
-           </item>
-           <item>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="2">
+           <widget class="QCheckBox" name="ufpd_pin_assignment_b_checkbox">
             <property name="text">
-             <string>Both UFP_D and DFP_D is connected</string>
+             <string>B</string>
             </property>
-           </item>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="label_9">
-           <property name="text">
-            <string>Enable DP Mode</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1" colspan="6">
-          <widget class="QComboBox" name="comboBox">
-           <item>
+           </widget>
+          </item>
+          <item row="6" column="0">
+           <widget class="QLabel" name="ufpd_pin_assignment_label">
             <property name="text">
-             <string>UFP_D-capable (including Branch device)</string>
+             <string>UFPD Pin Assignment</string>
             </property>
-           </item>
-           <item>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1" colspan="6">
+           <widget class="QComboBox" name="dp_transport_signalling_cbb">
+            <item>
+             <property name="text">
+              <string>Supports USB signalling rates and electrical specification</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Supports DP signalling rates and electrical specification</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="5" column="2">
+           <widget class="QCheckBox" name="dfpd_pin_assignment_b_checkbox">
             <property name="text">
-             <string>DFP_D-capable (including Branch device)</string>
+             <string>B</string>
             </property>
-           </item>
-          </widget>
-         </item>
-         <item row="5" column="5">
-          <widget class="QCheckBox" name="checkBox_7">
-           <property name="text">
-            <string>E</string>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="6">
-          <widget class="QCheckBox" name="checkBox_8">
-           <property name="text">
-            <string>F</string>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="3">
-          <widget class="QCheckBox" name="checkBox_5">
-           <property name="text">
-            <string>C</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="label_4">
-           <property name="text">
-            <string>DP Port Capability</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="0">
-          <widget class="QLabel" name="label_5">
-           <property name="text">
-            <string>DFPD Pin Assignment</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="4">
-          <widget class="QCheckBox" name="checkBox_6">
-           <property name="text">
-            <string>D</string>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="1">
-          <widget class="QCheckBox" name="checkBox_12">
-           <property name="text">
-            <string>A</string>
-           </property>
-          </widget>
-         </item>
-         <item row="9" column="0">
-          <widget class="QLabel" name="label_8">
-           <property name="text">
-            <string>DP VDO Version</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="6">
-          <widget class="QCheckBox" name="checkBox_11">
-           <property name="text">
-            <string>F</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QCheckBox" name="checkBox">
-           <property name="layoutDirection">
-            <enum>Qt::LeftToRight</enum>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-         <item row="10" column="0">
-          <widget class="QLabel" name="label_11">
-           <property name="text">
-            <string>DP Mode Auto Entry Allowed</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="0">
-          <widget class="QLabel" name="label_3">
-           <property name="text">
-            <string>USB2 Signalling Not Used</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item row="9" column="1" colspan="6">
-          <widget class="QComboBox" name="comboBox_5">
-           <item>
+           </widget>
+          </item>
+          <item row="7" column="0">
+           <widget class="QLabel" name="multi_function_preferred_label">
             <property name="text">
-             <string>DP v2.0</string>
+             <string>Multi Function Preferred</string>
             </property>
-           </item>
-           <item>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="1" colspan="6">
+           <widget class="QComboBox" name="dfpd_ufpd_connected_cbb">
+            <item>
+             <property name="text">
+              <string>Neither UFP_D nor DFP_D is connected</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>DFP_D is connected</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>UFP_D is connected</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Both UFP_D and DFP_D is connected</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="enable_dp_mode_label">
             <property name="text">
-             <string>DP v2.1</string>
+             <string>Enable DP Mode</string>
             </property>
-           </item>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QCheckBox" name="checkBox_2">
-           <property name="layoutDirection">
-            <enum>Qt::LeftToRight</enum>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-         <item row="10" column="1">
-          <widget class="QCheckBox" name="checkBox_16">
-           <property name="layoutDirection">
-            <enum>Qt::LeftToRight</enum>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-         <item row="7" column="1">
-          <widget class="QCheckBox" name="checkBox_15">
-           <property name="layoutDirection">
-            <enum>Qt::LeftToRight</enum>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1" colspan="6">
+           <widget class="QComboBox" name="dp_port_capability_cbb">
+            <item>
+             <property name="text">
+              <string>UFP_D-capable (including Branch device)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>DFP_D-capable (including Branch device)</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="5" column="5">
+           <widget class="QCheckBox" name="dfpd_pin_assignment_e_checkbox">
+            <property name="text">
+             <string>E</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="6">
+           <widget class="QCheckBox" name="dfpd_pin_assignment_f_checkbox">
+            <property name="text">
+             <string>F</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="3">
+           <widget class="QCheckBox" name="dfpd_pin_assignment_c_checkbox">
+            <property name="text">
+             <string>C</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="dp_port_capability_label">
+            <property name="text">
+             <string>DP Port Capability</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <widget class="QLabel" name="dfpd_pin_assignment_label">
+            <property name="text">
+             <string>DFPD Pin Assignment</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="4">
+           <widget class="QCheckBox" name="dfpd_pin_assignment_d_checkbox">
+            <property name="text">
+             <string>D</string>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="1">
+           <widget class="QCheckBox" name="ufpd_pin_assignment_a_checkbox">
+            <property name="text">
+             <string>A</string>
+            </property>
+           </widget>
+          </item>
+          <item row="9" column="0">
+           <widget class="QLabel" name="dp_vdo_version_label">
+            <property name="text">
+             <string>DP VDO Version</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="6">
+           <widget class="QCheckBox" name="ufpd_pin_assignment_f_checkbox">
+            <property name="text">
+             <string>F</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QCheckBox" name="enable_dp_sid_checkbox">
+            <property name="layoutDirection">
+             <enum>Qt::LeftToRight</enum>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="10" column="0">
+           <widget class="QLabel" name="dp_mode_auto_entry_allowed">
+            <property name="text">
+             <string>DP Mode Auto Entry Allowed</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="usb2_signalling_not_used_label">
+            <property name="text">
+             <string>USB2 Signalling Not Used</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="9" column="1" colspan="6">
+           <widget class="QComboBox" name="dp_vdo_version_cbb">
+            <item>
+             <property name="text">
+              <string>DP v2.0</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>DP v2.1</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QCheckBox" name="enable_dp_mode_checkbox">
+            <property name="layoutDirection">
+             <enum>Qt::LeftToRight</enum>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="10" column="1">
+           <widget class="QCheckBox" name="dp_mod_auto_entry_allowed_checkbox">
+            <property name="layoutDirection">
+             <enum>Qt::LeftToRight</enum>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="1">
+           <widget class="QCheckBox" name="multi_function_preferred_checkbox">
+            <property name="layoutDirection">
+             <enum>Qt::LeftToRight</enum>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="1" column="0">
+         <spacer name="verticalSpacer">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>174</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
       </widget>
       <widget class="QWidget" name="tab_2">
        <attribute name="title">
         <string>DP Cable Capabilities</string>
        </attribute>
       </widget>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QGroupBox" name="groupBox_2">
+      <property name="title">
+       <string>Generated Vendor Info File (VIF)</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="0" column="0">
+        <widget class="QLabel" name="save_status_label">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Status&lt;/span&gt;: Nothing in Progress&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QProgressBar" name="save_progress_bar">
+         <property name="value">
+          <number>0</number>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QPushButton" name="save_as_button">
+         <property name="text">
+          <string>Save As...</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="0" column="0">
+     <widget class="QGroupBox" name="groupBox">
+      <property name="title">
+       <string>Input Vendor Info File (VIF)</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="0">
+        <widget class="QLineEdit" name="input_line_edit">
+         <property name="placeholderText">
+          <string>Path to an existing USB VIF XML...</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QPushButton" name="browse_input_button">
+         <property name="text">
+          <string>Browse...</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="2" column="0" colspan="2">
+     <widget class="QGroupBox" name="groupBox_3">
+      <property name="title">
+       <string>Device Configuration</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_5">
+       <item row="0" column="1">
+        <widget class="QComboBox" name="port_cbb"/>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="port_label">
+         <property name="text">
+          <string>Port Label</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
      </widget>
     </item>
    </layout>

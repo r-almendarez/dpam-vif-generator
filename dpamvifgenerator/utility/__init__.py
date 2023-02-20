@@ -9,14 +9,18 @@ from PySide6.QtWidgets import QWidget
 from dpamvifgenerator import buildinfo
 
 
-def setup_storage():
+def setup_storage() -> str:
     """Setup local storage for saving files temporarily"""
     directories = appdirs.AppDirs(buildinfo.__product__, buildinfo.__company__)
+    # Create user data dir for storing app persistent data
+    user_data_dir = directories.user_data_dir
     try:
-        os.makedirs(directories.user_data_dir)
+        os.makedirs(user_data_dir)
     except OSError as e:
         if e.errno != errno.EEXIST:
             raise
+    # Return path
+    return user_data_dir
 
 
 def get_data_file_path(dir_name: str, file_name: str) -> str:

@@ -1,6 +1,7 @@
 import logging
 import os
 import platform
+import shelve
 
 from PySide6.QtCore import Signal
 from PySide6.QtGui import QIcon
@@ -46,29 +47,34 @@ class DPAMVIFGeneratorApp(QApplication):
         self.setApplicationDisplayName(buildinfo.__product__)
         self.setApplicationVersion(buildinfo.__version__)
 
+        self.user_data_dir = None
+        self.ds = None
         self.widget = None
-        self.quit = lambda: None
 
     def setup(self):
         # Setup local storage for app
-        setup_storage()
+        self.user_data_dir = setup_storage()
+        # Create datastore
+        self.ds = shelve.open(
+            os.path.join(self.user_data_dir, "{}.db".format(buildinfo.__bundle__))
+        )
         # Perform OS specific setup
         setup_os()
         # Create main window to start app
-        self.widget = MainWindow(splash_message=self.splash_message.emit)
+        self.widget = MainWindow(ds=self.ds, splash_message=self.splash_message.emit)
         # Connect signals with MainWindow
         self.aboutToQuit.connect(self.widget.app_quitting)
-        self.quit = self.widget.quit
 
     def start(self):
         self.widget.show()
         self.exec()
 
+    def quit(self):
+        self.widget.quit()
+        self.ds.close()
 
-def main():
-    # Setup local storage for app
-    setup_storage()
 
+def main(**kwargs):
     # Configure logging
     logging.basicConfig(
         level=LOG_LEVEL_MAP["info"], format=LOGGING_FORMAT, datefmt="%H:%M:%S"
