@@ -16,11 +16,10 @@ class MainWindow(QMainWindow):
         self.ds = ds
         self.user_data_dir = user_data_dir
         self.ui = load_ui_file(get_data_file_path("uifiles", "mainwindow.ui"))
-
-        # Populate UI
-
         # Connect Signals and Slots
         self.connect_signals_and_slots()
+        # Initialize UI
+        self.initialize_ui()
 
     def show(self):
         self.ui.show()
@@ -42,6 +41,12 @@ class MainWindow(QMainWindow):
             lambda x: self.save_to_store("user_path_to_input", x)
         )
 
+    def initialize_ui(self):
+        # Setup UI defaults
+        ds_input_vif = self.get_from_store("user_path_to_input")
+        if ds_input_vif:
+            self.populate_from_input_vif(ds_input_vif)
+
     def browse_input_button(self):
         # Get user input filename
         filename = QFileDialog.getOpenFileName(
@@ -54,8 +59,18 @@ class MainWindow(QMainWindow):
         if filename == "":
             return
         # User selected a file
-        filename = os.path.abspath(filename)
+        self.populate_from_input_vif(filename)
+
+    def populate_from_input_vif(self, input_vif_filename):
+        filename = os.path.abspath(input_vif_filename)
         self.ui.input_line_edit.setText(filename)
+        # Attempt to load file as VIF
+        input_vif = script.DPAMVIFGenerator.load_input_vif(filename)
+        # Populate ports list
+        self.ui.port_cbb.clear()
+        prefix_map = {"vif": "http://usb.org/VendorInfoFile.xsd"}
+        for port in input_vif.getroot().findall(".//vif:Component", prefix_map):
+            self.ui.port_cbb.addItem(port.find("vif:Port_Label", prefix_map).text)
 
     def save_as_output(self):
         # Get user output filename
