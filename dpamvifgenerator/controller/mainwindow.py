@@ -1,18 +1,20 @@
 import os
+from xml.etree import ElementTree as ET
 
 from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QFileDialog, QMainWindow
 
 from dpamvifgenerator import script
-from dpamvifgenerator.utility import get_data_file_path, load_ui_file
+from dpamvifgenerator.utility import XML_INDENT, get_data_file_path, load_ui_file
 
 
 class MainWindow(QMainWindow):
     application_is_closing = Signal()
 
-    def __init__(self, ds, splash_message=lambda x: None):
+    def __init__(self, ds, user_data_dir, splash_message=lambda x: None):
         super().__init__()
         self.ds = ds
+        self.user_data_dir = user_data_dir
         self.ui = load_ui_file(get_data_file_path("uifiles", "mainwindow.ui"))
 
         # Populate UI
@@ -75,11 +77,7 @@ class MainWindow(QMainWindow):
         pass
 
         # Generate DPAM Settings XML file
-        settings = script.DPAMVIFGenerator.generate_settings()
-
-        import pdb
-
-        pdb.set_trace()
+        settings = self.generate_settings()
 
         # Generate output VIF XML file
         script.main(
@@ -90,8 +88,57 @@ class MainWindow(QMainWindow):
             }
         )
 
+        # Clean up settings file
+        os.remove(settings)
+
     def save_to_store(self, name: str, value):
         self.ds[name] = value
 
     def get_from_store(self, name: str):
         return self.ds.get(name, "")
+
+    def generate_settings(self):
+        # Get default DP XML
+        default_xml_string = """<?xml version="1.0" ?>
+<vif:VIF xmlns:vif="http://usb.org/VendorInfoFile.xsd">
+    <vif:Component>
+        <vif:Port_Label>0</vif:Port_Label>
+        <vif:SOPSVID>
+            <vif:SVID_SOP value="65281">FF01</vif:SVID_SOP>
+            <vif:SVID_Modes_Fixed_SOP value="true"/>
+            <vif:SVID_Num_Modes_Min_SOP value="1"/>
+            <vif:SVID_Num_Modes_Max_SOP value="1"/>
+            <vif:SOPSVIDModeList>
+                <vif:SOPSVIDMode>
+                    <vif:SVID_Mode_Enter_SOP value="true"/>
+                    <vif:SVID_Mode_Recog_Value_SOP value="786501">0x000C0045</vif:SVID_Mode_Recog_Value_SOP>
+                </vif:SOPSVIDMode>
+            </vif:SOPSVIDModeList>
+        </vif:SOPSVID>
+    </vif:Component>
+    <vif:Component>
+        <vif:Port_Label>1</vif:Port_Label>
+        <vif:SOPSVID>
+            <vif:SVID_SOP value="65281">FF01</vif:SVID_SOP>
+            <vif:SVID_Modes_Fixed_SOP value="true"/>
+            <vif:SVID_Num_Modes_Min_SOP value="1"/>
+            <vif:SVID_Num_Modes_Max_SOP value="1"/>
+            <vif:SOPSVIDModeList>
+                <vif:SOPSVIDMode>
+                    <vif:SVID_Mode_Enter_SOP value="true"/>
+                    <vif:SVID_Mode_Recog_Value_SOP value="786501">0x000C0045</vif:SVID_Mode_Recog_Value_SOP>
+                </vif:SOPSVIDMode>
+            </vif:SOPSVIDModeList>
+        </vif:SOPSVID>
+    </vif:Component>
+</vif:VIF>
+        """  # noqa: E501
+        settings_tree = ET.ElementTree(ET.fromstring(default_xml_string))
+        ET.indent(settings_tree, space=XML_INDENT, level=0)
+        # Update based on user provided arguments
+        pass
+        # Write to local file
+        settings = os.path.join(self.user_data_dir, "settings.xml")
+        settings_tree.write(settings, encoding="utf8", method="xml")
+        # Return settings file path
+        return settings

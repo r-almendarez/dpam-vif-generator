@@ -61,7 +61,11 @@ class DPAMVIFGeneratorApp(QApplication):
         # Perform OS specific setup
         setup_os()
         # Create main window to start app
-        self.widget = MainWindow(ds=self.ds, splash_message=self.splash_message.emit)
+        self.widget = MainWindow(
+            ds=self.ds,
+            user_data_dir=self.user_data_dir,
+            splash_message=self.splash_message.emit,
+        )
         # Connect signals with MainWindow
         self.aboutToQuit.connect(self.widget.app_quitting)
 

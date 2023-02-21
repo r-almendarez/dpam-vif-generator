@@ -8,7 +8,11 @@ from PySide6.QtWidgets import QWidget
 
 from dpamvifgenerator import buildinfo
 
+# Utility Consts
+XML_INDENT = "  "
 
+
+# Utility Functions
 def setup_storage() -> str:
     """Setup local storage for saving files temporarily"""
     directories = appdirs.AppDirs(buildinfo.__product__, buildinfo.__company__)
