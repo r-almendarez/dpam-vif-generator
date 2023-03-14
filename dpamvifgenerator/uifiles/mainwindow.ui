@@ -38,7 +38,7 @@
            </widget>
           </item>
           <item row="4" column="1" colspan="6">
-           <widget class="QComboBox" name="usb2_signalling_not_used_cbb">
+           <widget class="QComboBox" name="usb2_signaling_not_used_cbb">
             <item>
              <property name="text">
               <string>May be requried</string>
@@ -83,9 +83,9 @@
            </widget>
           </item>
           <item row="3" column="0">
-           <widget class="QLabel" name="dp_transport_signalling_label">
+           <widget class="QLabel" name="dp_transport_signaling_label">
             <property name="text">
-             <string>DP Transport Signalling</string>
+             <string>DP Transport Signaling</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -120,15 +120,15 @@
            </widget>
           </item>
           <item row="3" column="1" colspan="6">
-           <widget class="QComboBox" name="dp_transport_signalling_cbb">
+           <widget class="QComboBox" name="dp_transport_signaling_cbb">
             <item>
              <property name="text">
-              <string>Supports USB signalling rates and electrical specification</string>
+              <string>Supports USB signaling rates and electrical specification</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>Supports DP signalling rates and electrical specification</string>
+              <string>Supports DP signaling rates and electrical specification</string>
              </property>
             </item>
            </widget>
@@ -288,9 +288,9 @@
            </widget>
           </item>
           <item row="4" column="0">
-           <widget class="QLabel" name="usb2_signalling_not_used_label">
+           <widget class="QLabel" name="usb2_signaling_not_used_label">
             <property name="text">
-             <string>USB2 Signalling Not Used</string>
+             <string>USB2 Signaling Not Used</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

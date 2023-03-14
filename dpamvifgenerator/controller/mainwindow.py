@@ -64,7 +64,7 @@ class MainWindow(QMainWindow):
     def populate_from_input_vif(self, input_vif_filename):
         filename = os.path.abspath(input_vif_filename)
         self.ui.input_line_edit.setText(filename)
-        # Attempt to load file as VIF
+        # Attempt to load file as VIF. File may no longer exist
         input_vif = script.DPAMVIFGenerator.load_input_vif(filename)
         # Populate ports list
         self.ui.port_cbb.clear()
