@@ -15,356 +15,6 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_3">
-    <item row="3" column="0" colspan="2">
-     <widget class="QTabWidget" name="tabWidget">
-      <property name="layoutDirection">
-       <enum>Qt::LeftToRight</enum>
-      </property>
-      <property name="currentIndex">
-       <number>0</number>
-      </property>
-      <widget class="QWidget" name="tab">
-       <attribute name="title">
-        <string>DP Source/Sink Capabilities</string>
-       </attribute>
-       <layout class="QGridLayout" name="gridLayout_6">
-        <item row="0" column="0">
-         <layout class="QGridLayout" name="gridLayout_4">
-          <item row="6" column="3">
-           <widget class="QCheckBox" name="ufpd_pin_assignment_c_checkbox">
-            <property name="text">
-             <string>C</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="1" colspan="6">
-           <widget class="QComboBox" name="usb2_signaling_not_used_cbb">
-            <item>
-             <property name="text">
-              <string>May be requried</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Not required</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="6" column="5">
-           <widget class="QCheckBox" name="ufpd_pin_assignment_e_checkbox">
-            <property name="text">
-             <string>E</string>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="1">
-           <widget class="QCheckBox" name="dfpd_pin_assignment_a_checkbox">
-            <property name="text">
-             <string>A</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="enable_dp_sid_label">
-            <property name="text">
-             <string>Enable DP SID</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="4">
-           <widget class="QCheckBox" name="ufpd_pin_assignment_d_checkbox">
-            <property name="text">
-             <string>D</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="dp_transport_signaling_label">
-            <property name="text">
-             <string>DP Transport Signaling</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="8" column="0">
-           <widget class="QLabel" name="dfpd_ufpd_connected_label">
-            <property name="text">
-             <string>DFPD_UFPD Connected</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="2">
-           <widget class="QCheckBox" name="ufpd_pin_assignment_b_checkbox">
-            <property name="text">
-             <string>B</string>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="0">
-           <widget class="QLabel" name="ufpd_pin_assignment_label">
-            <property name="text">
-             <string>UFPD Pin Assignment</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="1" colspan="6">
-           <widget class="QComboBox" name="dp_transport_signaling_cbb">
-            <item>
-             <property name="text">
-              <string>Supports USB signaling rates and electrical specification</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Supports DP signaling rates and electrical specification</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="5" column="2">
-           <widget class="QCheckBox" name="dfpd_pin_assignment_b_checkbox">
-            <property name="text">
-             <string>B</string>
-            </property>
-           </widget>
-          </item>
-          <item row="7" column="0">
-           <widget class="QLabel" name="multi_function_preferred_label">
-            <property name="text">
-             <string>Multi Function Preferred</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="8" column="1" colspan="6">
-           <widget class="QComboBox" name="dfpd_ufpd_connected_cbb">
-            <item>
-             <property name="text">
-              <string>Neither UFP_D nor DFP_D is connected</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>DFP_D is connected</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>UFP_D is connected</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Both UFP_D and DFP_D is connected</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="enable_dp_mode_label">
-            <property name="text">
-             <string>Enable DP Mode</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1" colspan="6">
-           <widget class="QComboBox" name="dp_port_capability_cbb">
-            <item>
-             <property name="text">
-              <string>UFP_D-capable (including Branch device)</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>DFP_D-capable (including Branch device)</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="5" column="5">
-           <widget class="QCheckBox" name="dfpd_pin_assignment_e_checkbox">
-            <property name="text">
-             <string>E</string>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="6">
-           <widget class="QCheckBox" name="dfpd_pin_assignment_f_checkbox">
-            <property name="text">
-             <string>F</string>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="3">
-           <widget class="QCheckBox" name="dfpd_pin_assignment_c_checkbox">
-            <property name="text">
-             <string>C</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="dp_port_capability_label">
-            <property name="text">
-             <string>DP Port Capability</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="0">
-           <widget class="QLabel" name="dfpd_pin_assignment_label">
-            <property name="text">
-             <string>DFPD Pin Assignment</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="4">
-           <widget class="QCheckBox" name="dfpd_pin_assignment_d_checkbox">
-            <property name="text">
-             <string>D</string>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="1">
-           <widget class="QCheckBox" name="ufpd_pin_assignment_a_checkbox">
-            <property name="text">
-             <string>A</string>
-            </property>
-           </widget>
-          </item>
-          <item row="9" column="0">
-           <widget class="QLabel" name="dp_vdo_version_label">
-            <property name="text">
-             <string>DP VDO Version</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="6">
-           <widget class="QCheckBox" name="ufpd_pin_assignment_f_checkbox">
-            <property name="text">
-             <string>F</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QCheckBox" name="enable_dp_sid_checkbox">
-            <property name="layoutDirection">
-             <enum>Qt::LeftToRight</enum>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-           </widget>
-          </item>
-          <item row="10" column="0">
-           <widget class="QLabel" name="dp_mode_auto_entry_allowed">
-            <property name="text">
-             <string>DP Mode Auto Entry Allowed</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="0">
-           <widget class="QLabel" name="usb2_signaling_not_used_label">
-            <property name="text">
-             <string>USB2 Signaling Not Used</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="9" column="1" colspan="6">
-           <widget class="QComboBox" name="dp_vdo_version_cbb">
-            <item>
-             <property name="text">
-              <string>DP v2.0</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>DP v2.1</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QCheckBox" name="enable_dp_mode_checkbox">
-            <property name="layoutDirection">
-             <enum>Qt::LeftToRight</enum>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-           </widget>
-          </item>
-          <item row="10" column="1">
-           <widget class="QCheckBox" name="dp_mod_auto_entry_allowed_checkbox">
-            <property name="layoutDirection">
-             <enum>Qt::LeftToRight</enum>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-           </widget>
-          </item>
-          <item row="7" column="1">
-           <widget class="QCheckBox" name="multi_function_preferred_checkbox">
-            <property name="layoutDirection">
-             <enum>Qt::LeftToRight</enum>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item row="1" column="0">
-         <spacer name="verticalSpacer">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>174</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="tab_2">
-       <attribute name="title">
-        <string>DP Cable Capabilities</string>
-       </attribute>
-      </widget>
-     </widget>
-    </item>
     <item row="0" column="1">
      <widget class="QGroupBox" name="groupBox_2">
       <property name="title">
@@ -403,6 +53,9 @@
       <layout class="QGridLayout" name="gridLayout">
        <item row="0" column="0">
         <widget class="QLineEdit" name="input_line_edit">
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
          <property name="placeholderText">
           <string>Path to an existing USB VIF XML...</string>
          </property>
@@ -425,10 +78,10 @@
       </property>
       <layout class="QGridLayout" name="gridLayout_5">
        <item row="0" column="1">
-        <widget class="QComboBox" name="port_cbb"/>
+        <widget class="QComboBox" name="port_label_cbb"/>
        </item>
        <item row="0" column="0">
-        <widget class="QLabel" name="port_label">
+        <widget class="QLabel" name="port_label_label">
          <property name="text">
           <string>Port Label</string>
          </property>
@@ -448,6 +101,491 @@
         </spacer>
        </item>
       </layout>
+     </widget>
+    </item>
+    <item row="3" column="0" colspan="2">
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="sop_displayport_capabilities_tab">
+       <attribute name="title">
+        <string>SOP DisplayPort Capabilities</string>
+       </attribute>
+       <widget class="QWidget" name="layoutWidget">
+        <property name="geometry">
+         <rect>
+          <x>7</x>
+          <y>10</y>
+          <width>771</width>
+          <height>366</height>
+         </rect>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_4">
+         <item row="5" column="2">
+          <widget class="QCheckBox" name="sink_pin_assignments_d_checkbox">
+           <property name="text">
+            <string>D</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1" colspan="3">
+          <widget class="QComboBox" name="dp_transport_signaling_cbb">
+           <item>
+            <property name="text">
+             <string>Supports DP signaling rates and electrical specification</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="usb20_signaling_not_used_label">
+           <property name="toolTip">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This field is set when USB2.0 is need while in a DisplayPort Configuration &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="text">
+            <string>USB2.0 Signaling Not Used</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="port_capability_label">
+           <property name="toolTip">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This field will correspond to the capabilities of the DisplayPort product. DP Sink is used for end-products such as monitors, docks, etc. DP Sources is used for end-products such as Notebooks, Cell Phones, etc. DP Source &amp;amp; Sink is used for end-products such as bi-directional Type-C to DP cables, docks, etc.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="text">
+            <string>Port Capability</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="1">
+          <widget class="QCheckBox" name="source_pin_assignments_c_checkbox">
+           <property name="text">
+            <string>C</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="2">
+          <widget class="QCheckBox" name="source_pin_assignments_d_checkbox">
+           <property name="text">
+            <string>D</string>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="1" colspan="3">
+          <widget class="QComboBox" name="dpam_version_cbb">
+           <item>
+            <property name="text">
+             <string>DPAM Version 2.0 or earlier</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>DPAM Version 2.1 or higher</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="2" column="1" colspan="3">
+          <widget class="QComboBox" name="receptacle_indication_cbb">
+           <item>
+            <property name="text">
+             <string>DP on USB-C Plug</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>DP on USB-C Receptacle</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="dp_transport_signaling_label">
+           <property name="toolTip">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This value shall always be set to 0001b &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="text">
+            <string>Signaling for Transport of DisplayPort Protocol</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="3">
+          <widget class="QCheckBox" name="source_pin_assginments_e_checkbox">
+           <property name="text">
+            <string>E</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="0">
+          <widget class="QLabel" name="source_pin_assignments_label">
+           <property name="toolTip">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This field will correspond to the supported DP Source Pin Assignments for a USB-C receptacle or the supported DP Sink Pin Assignments for a USB-C plug. The receptacle information is set by the information in &lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;Receptacle Indication&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="text">
+            <string>DP Source Pin Assignments for Receptacle</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="3">
+          <widget class="QCheckBox" name="sink_pin_assignments_e_checkbox">
+           <property name="text">
+            <string>E</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="receptacle_indication_label">
+           <property name="toolTip">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Calibri','sans-serif'; font-size:11pt;&quot;&gt;This field corresponds where the DisplayPort interface is presented, either Type-C Plug or Receptacle&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="text">
+            <string>Receptacle Indication</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="7" column="1">
+          <widget class="QCheckBox" name="dp_auto_mode_entry_checkbox">
+           <property name="layoutDirection">
+            <enum>Qt::LeftToRight</enum>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="0">
+          <widget class="QLabel" name="dpam_version_label">
+           <property name="toolTip">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This field sets the DisplayPort Alternate Mode Version for DisplayPort 2.1 or higher (or) DisplayPort 2.0 or earlier. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="text">
+            <string>DPAM Version</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1" colspan="3">
+          <widget class="QComboBox" name="port_capability_cbb">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <item>
+            <property name="text">
+             <string>DP Sink Capable</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>DP Source Capable</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Both DP Source &amp; Sink Capable</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="7" column="0">
+          <widget class="QLabel" name="dp_auto_mode_entry_label">
+           <property name="toolTip">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This field is specific for a DFP (DP Source) in which it will automatically enter DP Alt Mode. This field is not set for a UFP (DP Sink) as the DP Alt Mode sequence would be initiated by the DFP port partner. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="text">
+            <string>DP Mode Auto Entry</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1" colspan="3">
+          <widget class="QComboBox" name="usb20_signaling_not_used_cbb">
+           <item>
+            <property name="text">
+             <string>USB2.0 may be needed</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>USB2.0 is not needed</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="5" column="1">
+          <widget class="QCheckBox" name="sink_pin_assignments_c_checkbox">
+           <property name="text">
+            <string>C</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="0">
+          <widget class="QLabel" name="sink_pin_assginments_label">
+           <property name="toolTip">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This field will correspond to the supported DP Sink Pin Assignments for a USB-C receptacle or the supported DP Source Pin Assignments for a USB-C plug. The receptacle information is set by the information in &lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;Receptacle Indication&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="text">
+            <string>DP Sink Pin Assignments for Receptacle</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="8" column="0">
+          <spacer name="verticalSpacer">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>174</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="sopp_displayport_capabilities_tab">
+       <attribute name="title">
+        <string>SOP' DisplayPort Capabilities</string>
+       </attribute>
+       <widget class="QWidget" name="layoutWidget">
+        <property name="geometry">
+         <rect>
+          <x>11</x>
+          <y>10</y>
+          <width>761</width>
+          <height>332</height>
+         </rect>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_6">
+         <item row="0" column="0">
+          <widget class="QLabel" name="sopp_dp_transport_signaling_label">
+           <property name="toolTip">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This field corresponds to the rates supported by the cable. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="text">
+            <string>Signaling for Transport of DisplayPort Protocol</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QComboBox" name="sopp_dp_transport_signaling_cbb">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <item>
+            <property name="text">
+             <string>HBR3</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>HBR3 &amp; UHBR10</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>HBR3, UHBR10, &amp; UHBR20</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="dp_source_device_pin_assignments_label">
+           <property name="toolTip">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This field corresponds to the DP Source Pin Assignments supported by the cable. Pin Assignments C and D are supported by USB-C to USB-C cables. Pin Assignment E is supported by DP to USB-C cables &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="text">
+            <string>DP Source Device Pin Assignments</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QComboBox" name="dp_source_device_pin_assignments_cbb">
+           <item>
+            <property name="text">
+             <string>Pin Assignment C &amp; D</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Pin Assignment E</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="dp_sink_device_pin_assignments_label">
+           <property name="toolTip">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This field corresponds to the DP Sink Pin Assignments supported by the cable. Pin Assignments C and D are supported by USB-C to USB-C cables. Pin Assignment E is supported by DP to USB-C cables &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="text">
+            <string>DP Sink Device Pin Assignments</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QComboBox" name="dp_sink_device_pin_assignments_cbb">
+           <item>
+            <property name="text">
+             <string>Pin Assignment C &amp; D</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Pin Assignment E</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="uhbr135_support_label">
+           <property name="toolTip">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This field is set when the cable supports UHBR13.5. Passive cables supporting UHBR20 shall have this field set. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="text">
+            <string>UHBR13.5 Support</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QComboBox" name="uhbr135_support_label_cbb">
+           <item>
+            <property name="text">
+             <string>UHBR13.5 Supported</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>UHBR13.5 Not Supported</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="4" column="0">
+          <widget class="QLabel" name="active_component_label">
+           <property name="toolTip">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Calibri','sans-serif'; font-size:11pt;&quot;&gt;This field corresponds to the Active Component in the cable. &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="text">
+            <string>Active Component</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="1">
+          <widget class="QComboBox" name="active_component_cbb">
+           <item>
+            <property name="text">
+             <string>Passive Cable</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Active Re-Timer Cable</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Active Re-Driver Cable</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Optical Cable</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="5" column="0">
+          <widget class="QLabel" name="active_component_label_2">
+           <property name="toolTip">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This field sets the DisplayPort Alternate Mode Version for DisplayPort 2.1 or higher (or) DisplayPort 2.0 or earlier supported by the cable. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="text">
+            <string>DPAM Version</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="1">
+          <widget class="QComboBox" name="active_component_cbb_2">
+           <item>
+            <property name="text">
+             <string>DPAM Version 2.0 or earlier</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>DPAM Version 2.1 or higher</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="6" column="0">
+          <spacer name="verticalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>174</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </widget>
+      </widget>
      </widget>
     </item>
    </layout>

@@ -1,8 +1,9 @@
+import logging
 import os
 from xml.etree import ElementTree as ET
 
-from PySide6.QtCore import Signal
-from PySide6.QtWidgets import QFileDialog, QMainWindow
+from PySide6.QtCore import Qt, Signal
+from PySide6.QtWidgets import QCheckBox, QComboBox, QFileDialog, QMainWindow
 
 from dpamvifgenerator import script
 from dpamvifgenerator.utility import XML_INDENT, get_data_file_path, load_ui_file
@@ -41,11 +42,69 @@ class MainWindow(QMainWindow):
             lambda x: self.save_to_store("user_path_to_input", x)
         )
 
+        # Connect port label
+        self.ui.port_label_cbb.currentIndexChanged.connect(
+            lambda x: self.port_label_changed(x)
+        )
+
+        # Connect port widgets
+        def port_widget_changed(widget_name: str, value):
+            port_label = self.ui.port_label_cbb.currentIndex()
+            store_label = "{}_{}".format(widget_name, port_label)
+            self.save_to_store(store_label, value)
+
+        # Connect comboboxes
+        for cbb in self.ui.sop_displayport_capabilities_tab.findChildren(
+            QComboBox
+        ) + self.ui.sopp_displayport_capabilities_tab.findChildren(QComboBox):
+            cbb.currentIndexChanged.connect(
+                lambda x, cbb_name=cbb.objectName(): port_widget_changed(cbb_name, x)
+            )
+
+        # Connect checkboxes
+        for checkbox in self.ui.sop_displayport_capabilities_tab.findChildren(
+            QCheckBox
+        ):
+            checkbox.stateChanged.connect(
+                lambda x, checkbox_name=checkbox.objectName(): port_widget_changed(
+                    checkbox_name, x
+                )
+            )
+
     def initialize_ui(self):
+        # Disable UI by default until an input VIF is loaded
+        self.ui.port_label_cbb.setEnabled(False)
+        self.ui.sop_displayport_capabilities_tab.setEnabled(False)
+        self.ui.sopp_displayport_capabilities_tab.setEnabled(False)
+
         # Setup UI defaults
         ds_input_vif = self.get_from_store("user_path_to_input")
         if ds_input_vif:
             self.populate_from_input_vif(ds_input_vif)
+
+    def port_label_changed(self, port_value):
+        # Attempt to load port data from store
+        def get_port_widget_data(widget_name: str):
+            store_label = "{}_{}".format(widget_name, port_value)
+            return self.get_from_store(store_label)
+
+        for cbb in self.ui.sop_displayport_capabilities_tab.findChildren(
+            QComboBox
+        ) + self.ui.sopp_displayport_capabilities_tab.findChildren(QComboBox):
+            cbb_index = get_port_widget_data(cbb.objectName())
+            if cbb_index:
+                cbb.setCurrentIndex(cbb_index)
+            else:
+                cbb.setCurrentIndex(0)
+
+        for checkbox in self.ui.sop_displayport_capabilities_tab.findChildren(
+            QCheckBox
+        ):
+            checkbox_state = get_port_widget_data(checkbox.objectName())
+            if checkbox_state:
+                checkbox.setCheckState(Qt.CheckState(checkbox_state))
+            else:
+                checkbox.setCheckState(Qt.CheckState.Unchecked)
 
     def browse_input_button(self):
         # Get user input filename
@@ -65,12 +124,20 @@ class MainWindow(QMainWindow):
         filename = os.path.abspath(input_vif_filename)
         self.ui.input_line_edit.setText(filename)
         # Attempt to load file as VIF. File may no longer exist
-        input_vif = script.DPAMVIFGenerator.load_input_vif(filename)
+        try:
+            input_vif = script.DPAMVIFGenerator.load_input_vif(filename)
+        except script.InvalidInputVIF:
+            # Just return to allow user to try again
+            return
         # Populate ports list
-        self.ui.port_cbb.clear()
+        self.ui.port_label_cbb.clear()
         prefix_map = {"vif": "http://usb.org/VendorInfoFile.xsd"}
         for port in input_vif.getroot().findall(".//vif:Component", prefix_map):
-            self.ui.port_cbb.addItem(port.find("vif:Port_Label", prefix_map).text)
+            self.ui.port_label_cbb.addItem(port.find("vif:Port_Label", prefix_map).text)
+        # Activate UI elements
+        self.ui.port_label_cbb.setEnabled(True)
+        self.ui.sop_displayport_capabilities_tab.setEnabled(True)
+        self.ui.sopp_displayport_capabilities_tab.setEnabled(True)
 
     def save_as_output(self):
         # Get user output filename
@@ -108,14 +175,17 @@ class MainWindow(QMainWindow):
 
     def save_to_store(self, name: str, value):
         self.ds[name] = value
+        logging.debug("Stored {} with value {}".format(name, value))
 
     def get_from_store(self, name: str):
-        return self.ds.get(name, "")
+        value = self.ds.get(name, "")
+        logging.debug("Retrieved {} with value {}".format(name, value))
+        return value
 
     def generate_settings(self):
         # Get default DP XML
         default_xml_string = """<?xml version="1.0" ?>
-<vif:VIF xmlns:vif="http://usb.org/VendorInfoFile.xsd">
+<vif:VIF xmlns:opt="http://usb.org/VendorInfoFileOptionalContent.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:vif="http://usb.org/VendorInfoFile.xsd">
     <vif:Component>
         <vif:Port_Label>0</vif:Port_Label>
         <vif:SOPSVID>

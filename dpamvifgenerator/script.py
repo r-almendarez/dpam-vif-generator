@@ -4,7 +4,7 @@ from xml.etree import ElementTree as ET
 from dpamvifgenerator.utility import XML_INDENT
 
 # Consts
-DPAM_SOP_ID = 65281
+DPAM_SOP_ID = 65281  # 0xFF01
 
 
 # Exception Classes
@@ -55,7 +55,9 @@ class DPAMVIFGenerator:
     @staticmethod
     def load_input_vif(in_vif: str) -> ET:
         try:
-            return ET.parse(in_vif)
+            return ET.parse(
+                in_vif, parser=ET.XMLParser(target=ET.TreeBuilder(insert_comments=True))
+            )
         except Exception as e:
             error = (
                 "Error: Invalid Input USBIF VIF XML file "
