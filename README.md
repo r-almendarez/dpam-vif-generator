@@ -1,5 +1,19 @@
 # DPAM VIF Generator
 
+## License
+This tool is covered under the MIT License. See LICENSE file for full details.
+
+```
+Copyright (c) VESA. All rights reserved.
+This code is licensed under the MIT License (MIT).
+THIS CODE IS PROVIDED *AS IS* WITHOUT WARRANTY OF
+ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING ANY
+IMPLIED WARRANTIES OF FITNESS FOR A PARTICULAR
+PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
+```
+
+___
+
 ## High Level Summary
 > Problem Statement: Determining device/port capabilities for DPAM ports and DP Source ports is difficult and there is no standard, machine readable format to report this information to test tools. This affects test equipment correlation and proper test coverage for certification and at VESA Plugtest events.
 
@@ -36,7 +50,6 @@ ___
 ___
 
 ## Running from Source
-
 This tool requires Python 3.11 (or newer) and Poetry for running from source.
 
 1. Install Python 3.11 or newer
