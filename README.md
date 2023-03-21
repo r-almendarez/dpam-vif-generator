@@ -32,3 +32,18 @@ ___
     - DP information must be appended
 
 ![generation flow](./assets/read_me_flow.png)
+
+___
+
+## Running from Source
+
+This tool requires Python 3.11 (or newer) and Poetry for running from source.
+
+1. Install Python 3.11 or newer
+    - https://www.python.org/downloads/
+2. Install Poetry
+    - https://python-poetry.org/docs/#installing-with-the-official-installer
+3. Run the tool
+    - Open a terminal, navigate to the repo directory, and run the following commands:
+        - ```poetry install```
+        - ```poetry run python ./dpamvifgenerator/main.py```
