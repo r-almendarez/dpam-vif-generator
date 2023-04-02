@@ -11,6 +11,7 @@ import os
 import platform
 import shelve
 
+import qdarktheme
 from PySide6.QtCore import Signal
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QApplication
@@ -94,6 +95,7 @@ def main(**kwargs):
 
     # Create application and splash screen
     app = DPAMVIFGeneratorApp()
+    qdarktheme.setup_theme("auto")
     splash_screen = SplashScreen(
         splash_image_path=get_splash_screen_path(), timeout=0.1
     )

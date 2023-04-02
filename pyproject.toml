@@ -9,6 +9,7 @@ readme = "README.md"
 python = ">=3.11,<3.12"
 pyside6 = "^6.4.2"
 appdirs = "^1.4.4"
+pyqtdarktheme = "^2.1.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.1.0"

@@ -11,10 +11,23 @@ import os
 from xml.etree import ElementTree as ET
 
 from PySide6.QtCore import Qt, Signal
-from PySide6.QtWidgets import QCheckBox, QComboBox, QFileDialog, QMainWindow
+from PySide6.QtWidgets import (
+    QCheckBox,
+    QComboBox,
+    QFileDialog,
+    QGroupBox,
+    QMainWindow,
+    QWidget,
+)
 
-from dpamvifgenerator import script
+from dpamvifgenerator import buildinfo, script
 from dpamvifgenerator.utility import XML_INDENT, get_data_file_path, load_ui_file
+
+# Globals
+UI_TAB_SUFFIX = "_tab"
+UI_CBB_SUFFIX = "_cbb"
+UI_CHECKBOX_SUFFIX = "_checkbox"
+UI_GROUPBOX_SUFFIX = "_groupbox"
 
 
 class MainWindow(QMainWindow):
@@ -186,52 +199,160 @@ class MainWindow(QMainWindow):
         logging.debug("Stored {} with value {}".format(name, value))
 
     def get_from_store(self, name: str):
-        value = self.ds.get(name, "")
+        try:
+            value = self.ds.get(name, "")
+        except Exception:
+            value = ""
         logging.debug("Retrieved {} with value {}".format(name, value))
         return value
 
     def generate_settings(self):
         # Get default DP XML
-        default_xml_string = """<?xml version="1.0" ?>
-<vif:VIF xmlns:opt="http://usb.org/VendorInfoFileOptionalContent.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:vif="http://usb.org/VendorInfoFile.xsd">
-    <vif:Component>
-        <vif:Port_Label>0</vif:Port_Label>
-        <vif:SOPSVID>
-            <vif:SVID_SOP value="65281">FF01</vif:SVID_SOP>
-            <vif:SVID_Modes_Fixed_SOP value="true"/>
-            <vif:SVID_Num_Modes_Min_SOP value="1"/>
-            <vif:SVID_Num_Modes_Max_SOP value="1"/>
-            <vif:SOPSVIDModeList>
-                <vif:SOPSVIDMode>
-                    <vif:SVID_Mode_Enter_SOP value="true"/>
-                    <vif:SVID_Mode_Recog_Value_SOP value="786501">0x000C0045</vif:SVID_Mode_Recog_Value_SOP>
-                </vif:SOPSVIDMode>
-            </vif:SOPSVIDModeList>
-        </vif:SOPSVID>
-    </vif:Component>
-    <vif:Component>
-        <vif:Port_Label>1</vif:Port_Label>
-        <vif:SOPSVID>
-            <vif:SVID_SOP value="65281">FF01</vif:SVID_SOP>
-            <vif:SVID_Modes_Fixed_SOP value="true"/>
-            <vif:SVID_Num_Modes_Min_SOP value="1"/>
-            <vif:SVID_Num_Modes_Max_SOP value="1"/>
-            <vif:SOPSVIDModeList>
-                <vif:SOPSVIDMode>
-                    <vif:SVID_Mode_Enter_SOP value="true"/>
-                    <vif:SVID_Mode_Recog_Value_SOP value="786501">0x000C0045</vif:SVID_Mode_Recog_Value_SOP>
-                </vif:SOPSVIDMode>
-            </vif:SOPSVIDModeList>
-        </vif:SOPSVID>
-    </vif:Component>
+        default_xml_string = """<?xml version="1.0" encoding="utf-8"?>
+<vif:VIF xmlns:vif="http://usb.org/VendorInfoFile.xsd">
+  <vif:VIF_Specification>{vif_spec}</vif:VIF_Specification>
+  <vif:VIF_App>
+    <vif:Vendor>{vif_vendor}</vif:Vendor>
+    <vif:Name>{vif_name}</vif:Name>
+    <vif:Version>{vif_version}</vif:Version>
+  </vif:VIF_App>
 </vif:VIF>
-        """  # noqa: E501
+        """.format(
+            vif_spec="3.25",
+            vif_vendor=str(buildinfo.__company__),
+            vif_name=str(buildinfo.__product__),
+            vif_version=str(buildinfo.__version__),
+        )  # noqa: E501
+
+        # Create ElementTree from xml string
         settings_tree = ET.ElementTree(ET.fromstring(default_xml_string))
-        ET.indent(settings_tree, space=XML_INDENT, level=0)
+        vif_root = settings_tree.getroot()
+        # Register namespaces and add to root
+        prefix_map = script.DPAMVIFGenerator.get_prefix_map()
+        for name, namespace in prefix_map.items():
+            ET.register_namespace(name, namespace)
+            if name != "vif":  # xmlns:vif included in default xml string
+                vif_root.attrib["xmlns:" + name] = namespace
+
         # Update based on user provided arguments
-        pass
+        ports = [
+            self.ui.port_label_cbb.itemText(i)
+            for i in range(self.ui.port_label_cbb.count())
+        ]
+        tabs = [
+            self.ui.sop_displayport_capabilities_tab,
+            self.ui.sopp_displayport_capabilities_tab,
+        ]
+
+        # Get current values for each port from datastore
+        for port_value, port_label in enumerate(ports):
+            # Add Component and Port_Label elements
+            component_root = ET.Element("vif:Component")
+            vif_root.append(component_root)
+            port_label_element = ET.Element("vif:Port_Label")
+            port_label_element.text = str(port_label)
+            component_root.append(port_label_element)
+
+            # Create optional content root
+            opt_content_root = ET.Element(
+                "opt:OptionalContent", identifier="DPAM", space="preserve"
+            )
+            component_root.append(opt_content_root)
+
+            # Add in tab and field elements
+            for tab in tabs:
+                tab_root = ET.Element(
+                    "opt:{}".format(
+                        tab.objectName().replace(" ", "_").removesuffix(UI_TAB_SUFFIX)
+                    )
+                )
+                opt_content_root.append(tab_root)
+                for layout in tab.findChildren(
+                    QWidget, options=Qt.FindChildOption.FindDirectChildrenOnly
+                ):
+                    for field in layout.findChildren(
+                        QWidget, options=Qt.FindChildOption.FindDirectChildrenOnly
+                    ):
+                        # Generate XML elements for each field
+                        element = self.generate_element(field, port_value)
+                        if element is not None:
+                            tab_root.append(element)
+
         # Write to local file
-        settings = os.path.join(self.user_data_dir, "settings.xml")
+        settings = os.path.join(self.user_data_dir, "settings_new.xml")
+        ET.indent(settings_tree, space=XML_INDENT, level=0)
         settings_tree.write(settings, encoding="utf8", method="xml")
         # Return settings file path
         return settings
+
+    def generate_element(self, field, port_value: int) -> ET.Element | None:
+        if isinstance(field, QComboBox):
+            return self.generate_cbb_element(field, port_value)
+        elif isinstance(field, QCheckBox):
+            return self.generate_checkbox_element(field, port_value)
+        elif isinstance(field, QGroupBox):
+            return self.generate_groupbox_element(field, port_value)
+        else:
+            # Skip labels
+            return None
+
+    def generate_cbb_element(self, field: QComboBox, port_value: int) -> ET.Element:
+        # Get field name, current index value, and text from ComboBox
+        field_name = field.objectName()
+        try:
+            index_value = int(
+                self.get_from_store("{}_{}".format(field_name, port_value))
+            )
+        except ValueError:
+            index_value = 0
+        text = field.itemText(index_value)
+        # Build element
+        element_name = "opt:{}".format(field_name.removesuffix(UI_CBB_SUFFIX))
+        element = ET.Element(element_name, value=str(index_value))
+        element.text = str(text)
+        # Return built element
+        return element
+
+    def generate_checkbox_element(
+        self, field: QCheckBox, port_value: int
+    ) -> ET.Element:
+        # Get field name and checked state
+        field_name = field.objectName()
+        try:
+            checkbox_state = Qt.CheckState(
+                self.get_from_store("{}_{}".format(field_name, port_value))
+            )
+        except ValueError:
+            checkbox_state = Qt.CheckState.Unchecked
+        # Build element
+        element_name = "opt:{}".format(field_name.removesuffix(UI_CHECKBOX_SUFFIX))
+        value_string = "true" if checkbox_state == Qt.CheckState.Checked else "false"
+        element = ET.Element(element_name, value=value_string)
+        # Return built element
+        return element
+
+    def generate_groupbox_element(
+        self, field: QGroupBox, port_value: int
+    ) -> ET.Element:
+        # Get field name
+        field_name = field.objectName()
+        # Calculate the bit group value from groupbox checkbox fields
+        group_value = 0x0
+        text_list = []
+        for index, checkbox in enumerate(field.findChildren(QCheckBox)):
+            checkbox_name = checkbox.objectName()
+            try:
+                checkbox_state = Qt.CheckState(
+                    self.get_from_store("{}_{}".format(checkbox_name, port_value))
+                )
+            except ValueError:
+                checkbox_state = Qt.CheckState.Unchecked
+            if checkbox_state == Qt.CheckState.Checked:
+                group_value |= 1 << index
+                text_list.append(checkbox_name.removesuffix(UI_CHECKBOX_SUFFIX))
+        # Build element
+        element_name = "opt:{}".format(field_name.removesuffix(UI_GROUPBOX_SUFFIX))
+        element = ET.Element(element_name, value=str(group_value))
+        element.text = ", ".join(text_list)
+        # Return built element
+        return element
