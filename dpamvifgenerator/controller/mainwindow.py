@@ -8,6 +8,7 @@
 ######################################################
 import logging
 import os
+import shutil
 from xml.etree import ElementTree as ET
 
 from PySide6.QtCore import Qt, QThread, Signal
@@ -22,6 +23,7 @@ from PySide6.QtWidgets import (
 )
 
 from dpamvifgenerator import buildinfo, script
+from dpamvifgenerator.controller.about import AboutDialog
 from dpamvifgenerator.utility import XML_INDENT, get_data_file_path, load_ui_file
 from dpamvifgenerator.utility.worker import Worker
 
@@ -37,7 +39,7 @@ class MainWindow(QMainWindow):
 
     def __init__(self, ds, user_data_dir, splash_message=lambda x: None):
         super().__init__()
-        self.setWindowFlags(Qt.FramelessWindowHint)
+        self.setWindowTitle(buildinfo.__product__)
         self.ds = ds
         self.user_data_dir = user_data_dir
         self.ui = load_ui_file(get_data_file_path("uifiles", "mainwindow.ui"))
@@ -59,6 +61,12 @@ class MainWindow(QMainWindow):
         self.ui.close()
 
     def connect_signals_and_slots(self):
+        # Connect menubar options
+        self.ui.action_quit.triggered.connect(self.quit)
+        self.ui.action_export_settings.triggered.connect(self.export_settings)
+        self.ui.action_import_settings.triggered.connect(self.import_settings)
+        self.ui.action_about.triggered.connect(self.show_about)
+
         # Connect buttons
         self.ui.browse_input_button.clicked.connect(self.browse_input_button)
         self.ui.save_as_button.clicked.connect(self.save_as_output)
@@ -418,3 +426,32 @@ class MainWindow(QMainWindow):
         element.text = ", ".join(text_list)
         # Return built element
         return element
+
+    def export_settings(self):
+        """Export user settings to an XML file"""
+        filename = QFileDialog.getSaveFileName(
+            parent=self,
+            caption="Select .xml File",
+            dir=self.get_from_store("export_settings_file_path"),
+            filter="XML Files (*.xml)",
+        )[0]
+        # Return if no file name was provided
+        if filename == "":
+            return
+
+        # Store filename in datastore
+        filename = os.path.abspath(filename)
+        self.save_to_store("export_settings_file_path", filename)
+
+        # Generate settings
+        settings = self.generate_settings()
+
+        # Move settings to filename path
+        shutil.move(settings, filename)
+
+    def import_settings(self):
+        pass
+
+    def show_about(self):
+        about_dialog = AboutDialog(self)
+        about_dialog.show()

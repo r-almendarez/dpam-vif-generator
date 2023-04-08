@@ -15,3 +15,6 @@ __bundle__ = (
     .lower()
     .replace(" ", "-")
 )
+"""Developed with respect to the following specification versions"""
+__dpam_vif_spec_version__ = "0.1.0"
+__usbif_vif_spec_version__ = "3.4.5.0"
