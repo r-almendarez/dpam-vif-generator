@@ -32,6 +32,7 @@ UI_TAB_SUFFIX = "_tab"
 UI_CBB_SUFFIX = "_cbb"
 UI_CHECKBOX_SUFFIX = "_checkbox"
 UI_GROUPBOX_SUFFIX = "_groupbox"
+UI_SUFFIXES = [UI_TAB_SUFFIX, UI_CBB_SUFFIX, UI_CHECKBOX_SUFFIX, UI_GROUPBOX_SUFFIX]
 
 
 class MainWindow(QMainWindow):
@@ -377,7 +378,7 @@ class MainWindow(QMainWindow):
             index_value = 0
         text = field.itemText(index_value)
         # Build element
-        element_name = "opt:{}".format(field_name.removesuffix(UI_CBB_SUFFIX))
+        element_name = "opt:{}".format(self.sanitize_widget_name(field_name))
         element = ET.Element(element_name, value=str(index_value))
         element.text = str(text)
         # Return built element
@@ -395,7 +396,7 @@ class MainWindow(QMainWindow):
         except ValueError:
             checkbox_state = Qt.CheckState.Unchecked
         # Build element
-        element_name = "opt:{}".format(field_name.removesuffix(UI_CHECKBOX_SUFFIX))
+        element_name = "opt:{}".format(self.sanitize_widget_name(field_name))
         value_string = "true" if checkbox_state == Qt.CheckState.Checked else "false"
         element = ET.Element(element_name, value=value_string)
         # Return built element
@@ -419,13 +420,19 @@ class MainWindow(QMainWindow):
                 checkbox_state = Qt.CheckState.Unchecked
             if checkbox_state == Qt.CheckState.Checked:
                 group_value |= 1 << index
-                text_list.append(checkbox_name.removesuffix(UI_CHECKBOX_SUFFIX))
+                text_list.append(self.sanitize_widget_name(checkbox_name))
         # Build element
-        element_name = "opt:{}".format(field_name.removesuffix(UI_GROUPBOX_SUFFIX))
+        element_name = "opt:{}".format(self.sanitize_widget_name(field_name))
         element = ET.Element(element_name, value=str(group_value))
         element.text = ", ".join(text_list)
         # Return built element
         return element
+
+    def sanitize_widget_name(self, widget_name: str) -> str:
+        """Remove UI suffixes from widget name"""
+        for suffix in UI_SUFFIXES:
+            widget_name = widget_name.removesuffix(suffix)
+        return widget_name
 
     def export_settings(self):
         """Export user settings to an XML file"""
@@ -450,7 +457,110 @@ class MainWindow(QMainWindow):
         shutil.move(settings, filename)
 
     def import_settings(self):
-        pass
+        # Get user input settings XML
+        filename = QFileDialog.getOpenFileName(
+            parent=self,
+            caption="Select .xml File",
+            dir=self.get_from_store("import_settings_file_path"),
+            filter="XML Files (*.xml)",
+        )[0]
+        # Return if no file was selected
+        if filename == "":
+            return
+
+        # User selected a file
+        filename = os.path.abspath(filename)
+        self.save_to_store("import_settings_file_path", filename)
+
+        # Load settings from input XML
+        self.populate_settings_from_input_xml(filename)
+
+    def populate_settings_from_input_xml(self, filename):
+        # Attempt to load file as VIF. File may no longer exist
+        try:
+            dpam_settings = script.DPAMVIFGenerator.load_input_vif(filename)
+        except script.InvalidInputVIF:
+            # Just return to allow user to try again
+            return
+
+        # Get port DPAM settings from DPAM Settings XML
+        prefix_map = script.DPAMVIFGenerator.get_prefix_map()
+        port_settings = script.DPAMVIFGenerator.get_port_settings_from_vif(
+            dpam_settings
+        )
+
+        # Apply settings for each port
+        current_port = self.ui.port_label_cbb.currentIndex()
+        ports = [
+            self.ui.port_label_cbb.itemText(i)
+            for i in range(self.ui.port_label_cbb.count())
+        ]
+        tabs = [
+            self.ui.sop_displayport_capabilities_tab,
+            self.ui.sopp_displayport_capabilities_tab,
+        ]
+        for port_value, port_label in enumerate(ports):
+            self.ui.port_label_cbb.setCurrentIndex(port_value)
+            # Skip if port does not exist in port settings
+            if port_label not in port_settings:
+                continue
+            # Apply all fields from port settings that exist in UI
+            for tab in tabs:
+                tab_name = self.sanitize_widget_name(tab.objectName())
+                for layout in tab.findChildren(
+                    QWidget, options=Qt.FindChildOption.FindDirectChildrenOnly
+                ):
+                    for field in layout.findChildren(
+                        QWidget, options=Qt.FindChildOption.FindDirectChildrenOnly
+                    ):
+                        # Grab setting from port settings for field
+                        field_name = self.sanitize_widget_name(field.objectName())
+                        field_setting = port_settings[port_label].find(
+                            f".//opt:{tab_name}/opt:{field_name}", prefix_map
+                        )
+                        # Apply field setting to UI
+                        self.apply_field_setting(field, field_setting)
+        # Restore current port selection
+        self.ui.port_label_cbb.setCurrentIndex(current_port)
+
+    def apply_field_setting(self, field: QWidget | None, field_setting: ET.Element):
+        if isinstance(field, QComboBox):
+            self.apply_cbb_setting(field, field_setting)
+        elif isinstance(field, QCheckBox):
+            self.apply_checkbox_setting(field, field_setting)
+        elif isinstance(field, QGroupBox):
+            self.apply_groupbox_setting(field, field_setting)
+
+    def apply_cbb_setting(self, field: QComboBox, field_setting: ET.Element):
+        try:
+            value = field_setting.attrib["value"]
+            field.setCurrentIndex(int(value))
+        except Exception:
+            # Skip any malformed settings and keep trying to load
+            return
+
+    def apply_checkbox_setting(self, field: QCheckBox, field_setting: ET.Element):
+        try:
+            if field_setting.attrib["value"] == "false":
+                field.setCheckState(Qt.CheckState.Unchecked)
+            elif field_setting.attrib["value"] == "true":
+                field.setCheckState(Qt.CheckState.Checked)
+        except Exception:
+            # Skip any malformed settings and keep trying to load
+            return
+
+    def apply_groupbox_setting(self, field: QGroupBox, field_setting: ET.Element):
+        try:
+            value = int(field_setting.attrib["value"])
+            for index, checkbox in enumerate(field.findChildren(QCheckBox)):
+                checkbox_value = value & (1 << index)
+                if checkbox_value:
+                    checkbox.setCheckState(Qt.CheckState.Checked)
+                else:
+                    checkbox.setCheckState(Qt.CheckState.Unchecked)
+        except Exception:
+            # Skip any malformed settings and keep trying to load
+            return
 
     def show_about(self):
         about_dialog = AboutDialog(self)

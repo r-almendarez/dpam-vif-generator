@@ -153,17 +153,10 @@ class DPAMVIFGenerator:
     @staticmethod
     def generate_dpam_vif(input_vif: ET, dpam_settings: ET):
         # Get port DPAM settings from DPAM Settings XML
-        prefix_map = DPAMVIFGenerator.get_prefix_map()
-        port_settings = {}
-        for port in dpam_settings.getroot().findall(".//vif:Component", prefix_map):
-            port_name = port.find("vif:Port_Label", prefix_map).text
-            if not port_name:
-                error = "Error: Missing vif:Port_Label from DPAM Settings XML file"
-                logging.error(error)
-                raise InvalidSettingsXML(error)
-            port_settings[port_name] = port.find(".//opt:OptionalContent", prefix_map)
+        port_settings = DPAMVIFGenerator.get_port_settings_from_vif(dpam_settings)
 
         # Insert DPAM Opt Content blocks on each port
+        prefix_map = DPAMVIFGenerator.get_prefix_map()
         for port in input_vif.getroot().findall(".//vif:Component", prefix_map):
             port_name = port.find("vif:Port_Label", prefix_map).text
             # Check for existing optional content
@@ -174,6 +167,20 @@ class DPAMVIFGenerator:
             else:
                 # No existing OptionalContent, so use DPAM version as is
                 port.append(port_settings[port_name])
+
+    @staticmethod
+    def get_port_settings_from_vif(dpam_settings: ET) -> dict[str, ET.Element]:
+        # Get port DPAM settings from DPAM Settings XML
+        prefix_map = DPAMVIFGenerator.get_prefix_map()
+        port_settings: dict[str, ET.Element] = {}
+        for port in dpam_settings.getroot().findall(".//vif:Component", prefix_map):
+            port_name = port.find("vif:Port_Label", prefix_map).text
+            if not port_name:
+                error = "Error: Missing vif:Port_Label from DPAM Settings XML file"
+                logging.error(error)
+                raise InvalidSettingsXML(error)
+            port_settings[port_name] = port.find(".//opt:OptionalContent", prefix_map)
+        return port_settings
 
     @staticmethod
     def write_output_vif(generated_vif: ET, out_vif: str):
