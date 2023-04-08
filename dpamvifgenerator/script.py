@@ -28,36 +28,92 @@ class InvalidSettingsXML(Exception):
     pass
 
 
+# Progress Emitter Class
+class Progress:
+    def __init__(
+        self,
+        total: float,
+        prefix: str = "",
+        suffix: str = "",
+        decimals: int = 1,
+        length: int = 100,
+        fill: str = "\u2588",
+        printEnd: str = "\r",
+    ):
+        """
+        Call in a loop to create terminal progress bar
+        @params:
+            total       - Required  : total value of progress bar
+            prefix      - Optional  : prefix string
+            suffix      - Optional  : suffix string
+            decimals    - Optional  : positive number of decimals in percent complete
+            length      - Optional  : character length of bar
+            fill        - Optional  : bar fill character
+            printEnd    - Optional  : end character (e.g. "\r", "\r\n")
+        """
+        self.prefix = prefix
+        self.suffix = suffix
+        self.decimals = decimals
+        self.length = length
+        self.fill = fill
+        self.printEnd = printEnd
+        self.total = total
+
+    # Progress Bar Printing Function
+    def printProgressBar(self, value: int):
+        percent = ("{0:." + str(self.decimals) + "f}").format(
+            100 * (value / float(self.total))
+        )
+        filledLength = int(self.length * value // self.total)
+        bar = self.fill * filledLength + "-" * (self.length - filledLength)
+        print(f"\r{self.prefix} |{bar}| {percent}% {self.suffix}", end=self.printEnd)
+
+    # Value updater
+    def setValue(self, value: int):
+        self.printProgressBar(value)
+
+
 # DPAM VIF Generator Class
 class DPAMVIFGenerator:
     def __init__(self, **kwargs):
         # Load arguments from user
-        try:
-            [
-                setattr(self, key, kwargs[key])
-                for key in ["in_vif", "out_vif", "settings"]
-            ]
-        except KeyError as e:
-            error = "Error: Missing DPAMVIFGenerator argument. {}".format(e)
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+        # Check for required args
+        if not all(hasattr(self, key) for key in ["in_vif", "out_vif", "settings"]):
+            error = "Error: Missing DPAMVIFGenerator argument: {}".format(key)
             logging.error(error)
             raise MissingGeneratorArg(error)
+        # Check for passed in progress emitter
+        if not hasattr(self, "progress"):
+            # Create script's own progress emitter
+            self.progress_object = Progress()
+            self.progress = self.progress_object.setValue
 
     def generate_vif(self):
+        # Set progress
+        self.progress(0)
+
         # Register namespaces
         for name, namespace in DPAMVIFGenerator.get_prefix_map().items():
             ET.register_namespace(name, namespace)
+        self.progress(10)
 
         # Load input USBIF VIF XML
         input_vif = DPAMVIFGenerator.load_input_vif(self.in_vif)
+        self.progress(30)
 
         # Load DPAM Settings XML
         dpam_settings = DPAMVIFGenerator.load_dpam_settings(self.settings)
+        self.progress(50)
 
         # Generate DPAM VIF XML file
         DPAMVIFGenerator.generate_dpam_vif(input_vif, dpam_settings)
+        self.progress(80)
 
         # Write out generated XML file
         DPAMVIFGenerator.write_output_vif(input_vif, self.out_vif)
+        self.progress(100)
 
     @staticmethod
     def get_prefix_map() -> dict:

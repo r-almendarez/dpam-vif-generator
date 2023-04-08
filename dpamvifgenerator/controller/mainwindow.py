@@ -10,18 +10,20 @@ import logging
 import os
 from xml.etree import ElementTree as ET
 
-from PySide6.QtCore import Qt, Signal
+from PySide6.QtCore import Qt, QThread, Signal
 from PySide6.QtWidgets import (
     QCheckBox,
     QComboBox,
     QFileDialog,
     QGroupBox,
     QMainWindow,
+    QProgressBar,
     QWidget,
 )
 
 from dpamvifgenerator import buildinfo, script
 from dpamvifgenerator.utility import XML_INDENT, get_data_file_path, load_ui_file
+from dpamvifgenerator.utility.worker import Worker
 
 # Globals
 UI_TAB_SUFFIX = "_tab"
@@ -35,9 +37,12 @@ class MainWindow(QMainWindow):
 
     def __init__(self, ds, user_data_dir, splash_message=lambda x: None):
         super().__init__()
+        self.setWindowFlags(Qt.FramelessWindowHint)
         self.ds = ds
         self.user_data_dir = user_data_dir
         self.ui = load_ui_file(get_data_file_path("uifiles", "mainwindow.ui"))
+        self.worker = None
+        self.action_thread = None
         # Connect Signals and Slots
         self.connect_signals_and_slots()
         # Initialize UI
@@ -176,23 +181,80 @@ class MainWindow(QMainWindow):
         filename = os.path.abspath(filename)
         self.save_to_store("user_path_to_output", filename)
 
+        # Define action thread
+        def generate_output_vif_xml(progress: QProgressBar):
+            try:
+                # Set status text and progress
+                progress.setValue(0)
+                self.ui.save_status_label.setText(
+                    """<p>
+                        <span style=" font-weight:700;">
+                            Status
+                        </span>: Generating DPAM VIF Settings
+                    </p>"""
+                )
+
+                # Generate DPAM Settings XML file
+                settings = self.generate_settings()
+                progress.setValue(100)
+
+                # Generate output VIF XML file
+                self.ui.save_status_label.setText(
+                    """<p>
+                        <span style=" font-weight:700;">
+                            Status
+                        </span>: Generating DPAM VIF XML
+                    </p>"""
+                )
+                script.main(
+                    **{
+                        "in_vif": self.ui.input_line_edit.text(),
+                        "out_vif": filename,
+                        "settings": settings,
+                        "progress": progress.setValue,
+                    }
+                )
+
+                # Clean up settings file
+                os.remove(settings)
+            except Exception as e:
+                # Block thread finished since generation errored
+                self.action_thread.blockSignals(True)
+                logging.error("Error: Generation Failed. {}".format(e))
+                self.ui.save_status_label.setText(
+                    """<p>
+                        <span style=" font-weight:700;">
+                            Error
+                        </span>: Generation Failed. {}
+                    </p>""".format(
+                        e
+                    )
+                )
+
+        def generation_complete():
+            # Set status text
+            self.ui.save_status_label.setText(
+                """<p>
+                    <span style=" font-weight:700;">
+                        Status
+                    </span>: Generation Complete
+                </p>"""
+            )
+
         # Setup thread to generate VIF
-        pass
-
-        # Generate DPAM Settings XML file
-        settings = self.generate_settings()
-
-        # Generate output VIF XML file
-        script.main(
-            **{
-                "in_vif": self.ui.input_line_edit.text(),
-                "out_vif": filename,
-                "settings": settings,
-            }
+        self.worker = Worker()
+        self.action_thread = QThread()
+        self.worker.moveToThread(self.action_thread)
+        # Connect worker signals and slots
+        self.worker.action.connect(generate_output_vif_xml)
+        self.worker.finished.connect(self.action_thread.quit)
+        # Connect thread signals and slots
+        self.action_thread.started.connect(
+            lambda: self.worker.run(self.ui.save_progress_bar)
         )
-
-        # Clean up settings file
-        os.remove(settings)
+        self.action_thread.finished.connect(generation_complete)
+        # Start thread
+        self.action_thread.start()
 
     def save_to_store(self, name: str, value):
         self.ds[name] = value
