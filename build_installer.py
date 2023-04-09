@@ -7,6 +7,7 @@
 # PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 ######################################################
 import PyInstaller.__main__
+import os
 
 PyInstaller.__main__.run(
     [
@@ -17,15 +18,15 @@ PyInstaller.__main__.run(
         "--windowed",
         "--noconfirm",
         "--add-data",
-        "dpamvifgenerator\\uifiles\\mainwindow.ui;dpamvifgenerator\\uifiles",
+        os.path.join("dpamvifgenerator", "uifiles", "mainwindow.ui") + os.pathsep + os.path.join("dpamvifgenerator","uifiles"),
         "--add-data",
-        "dpamvifgenerator\\uifiles\\about.ui;dpamvifgenerator\\uifiles",
+        os.path.join("dpamvifgenerator", "uifiles", "about.ui") + os.pathsep + os.path.join("dpamvifgenerator", "uifiles"),
         "--add-data",
-        "assets\\vesa_logo_dark.png;assets",
+        os.path.join("assets", "vesa_logo_dark.png") + os.pathsep + "assets",
         "--add-data",
-        "assets\\vesa_logo_light.png;assets",
+        os.path.join("assets", "vesa_logo_light.png") + os.pathsep + "assets",
         "--add-data",
-        "assets\\displayport_icon.ico;assets",
+        os.path.join("assets", "displayport_icon.ico") + os.pathsep + "assets",
         "--hidden-import=ctypes",
         "--icon=./assets/displayport_icon.ico",
     ]
