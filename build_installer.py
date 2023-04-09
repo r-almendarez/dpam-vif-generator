@@ -27,5 +27,6 @@ PyInstaller.__main__.run(
         "--add-data",
         "assets\\displayport_icon.ico;assets",
         "--hidden-import=ctypes",
+        "--icon=./assets/displayport_icon.ico",
     ]
 )
