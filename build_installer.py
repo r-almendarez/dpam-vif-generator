@@ -20,6 +20,10 @@ PyInstaller.__main__.run(
         "dpamvifgenerator\\uifiles\\mainwindow.ui;dpamvifgenerator\\uifiles",
         "--add-data",
         "dpamvifgenerator\\uifiles\\about.ui;dpamvifgenerator\\uifiles",
+        "--add-data",
+        "assets\\vesa_logo_dark.png;assets",
+        "--add-data",
+        "assets\\vesa_logo_light.png;assets",
         "--hidden-import=ctypes",
     ]
 )
