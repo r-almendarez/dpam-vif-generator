@@ -57,18 +57,22 @@ ___
 This tool can be run as an interactive GUI, or in command-line batch mode. In either mode, the generation flow is the same. The user provides an existing compliant USBIF VIF XML file. The tool inserts DPAM configuration information on a port-basis, and then the tool generates an updated USBIF/DPAM VIF XML file with the DPAM content included under each port's OptionalContent block. 
 ![generation flow](./assets/read_me_flow.png)
 
-**GUI Mode**
+___
+
+## GUI Mode
 1. User should provide a USBIF VIF XML file under _Input Vendor Info File (VIF)_
 2. Configure each port's DPAM capabilities
 3. Click **Save As...** under _Generated Vendor Info File (VIF)_ and specify a path to generate the USBIF/DPAM VIF XML file
 
-**Additional Capabilities**
+### Additional Capabilities
 In GUI Mode, the tool can also Export the current DPAM settings the user has configured to its own XML file. This Settings.xml file can then be Imported, to restore the DPAM settings without having to reconfigure each field in the GUI. Additionally, this Settings.xml file can be used to run the tool in Command Line Mode, for automation and scripting.
 
-To Export Settings, click File -> Export Settings...
-To Import Settings, click File -> Import Settings...
+* To Export Settings, click File -> Export Settings...
+* To Import Settings, click File -> Import Settings...
 
-**Command-Line Mode**
+___
+
+## Command-Line Mode
 The tool provides the following command-line interface:
 | Parameter | Required | Help |
 | --- | --- | --- |
