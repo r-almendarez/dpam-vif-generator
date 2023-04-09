@@ -24,6 +24,8 @@ PyInstaller.__main__.run(
         "assets\\vesa_logo_dark.png;assets",
         "--add-data",
         "assets\\vesa_logo_light.png;assets",
+        "--add-data",
+        "assets\\displayport_icon.ico;assets",
         "--hidden-import=ctypes",
     ]
 )

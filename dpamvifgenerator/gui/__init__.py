@@ -42,7 +42,7 @@ def get_splash_screen_path(theme: str):
 
 def get_app_icon_path():
     root = os.path.abspath(os.path.join(__file__, "..", "..", ".."))
-    icon_path = os.path.join(root, "assets", "generator-icon.png")
+    icon_path = os.path.join(root, "assets", "displayport_icon.ico")
     return icon_path
 
 

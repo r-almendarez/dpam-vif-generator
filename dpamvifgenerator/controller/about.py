@@ -7,7 +7,6 @@ from dpamvifgenerator.utility import get_data_file_path, load_ui_file
 class AboutDialog(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setWindowTitle("About")
         self.ui = load_ui_file(get_data_file_path("uifiles", "about.ui"))
         # Connect Signals and Slots
         self.connect_signals_and_slots()
