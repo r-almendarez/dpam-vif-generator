@@ -38,7 +38,7 @@ UI_SUFFIXES = [UI_TAB_SUFFIX, UI_CBB_SUFFIX, UI_CHECKBOX_SUFFIX, UI_GROUPBOX_SUF
 class MainWindow(QMainWindow):
     application_is_closing = Signal()
 
-    def __init__(self, ds, user_data_dir, splash_message=lambda x: None):
+    def __init__(self, ds, user_data_dir, splash_message=lambda x: None, **kwargs):
         super().__init__()
         self.setWindowTitle(buildinfo.__product__)
         self.ds = ds
@@ -48,8 +48,12 @@ class MainWindow(QMainWindow):
         self.action_thread = None
         # Connect Signals and Slots
         self.connect_signals_and_slots()
+        # Load user supplied settings from the command line if they exist
+        self.load_user_args(**kwargs)
         # Initialize UI
         self.initialize_ui()
+        # Close out splash
+        splash_message("Initialization Complete")
 
     def show(self):
         self.ui.show()
@@ -105,6 +109,27 @@ class MainWindow(QMainWindow):
                     checkbox_name, x
                 )
             )
+
+    def load_user_args(self, **kwargs):
+        # Log parameters
+        logging.debug(f"Initializing GUI with the following parameters: {kwargs}")
+        # Load user arguments but ignore errors and allow user to continue on
+        try:
+            filename = os.path.abspath(kwargs["in_vif"])
+            self.ui.input_line_edit.setText(filename)
+        except Exception:
+            pass
+        try:
+            filename = os.path.abspath(kwargs["out_vif"])
+            self.save_to_store("user_path_to_output", filename)
+        except Exception:
+            pass
+        try:
+            filename = os.path.abspath(kwargs["settings"])
+            self.save_to_store("import_settings_file_path", filename)
+            self.populate_settings_from_input_xml(filename)
+        except Exception:
+            pass
 
     def initialize_ui(self):
         # Disable UI by default until an input VIF is loaded

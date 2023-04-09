@@ -7,6 +7,7 @@
 # PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 ######################################################
 import argparse
+import logging
 
 from dpamvifgenerator import buildinfo, gui, script
 
@@ -36,6 +37,8 @@ def main():
     # Parse args if they exist
     args = parser.parse_args()
     if args.batch:
+        # Redirect all logging to print since script is running as batch
+        logging.info = print
         script.main(**vars(args))
     else:
         gui.main(**vars(args))

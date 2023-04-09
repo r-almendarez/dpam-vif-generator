@@ -45,7 +45,7 @@ def setup_os():
 
 
 class DPAMVIFGeneratorApp(QApplication):
-    splash_message = Signal()
+    splash_message = Signal(str)
 
     def __init__(self):
         super().__init__([])
@@ -60,7 +60,7 @@ class DPAMVIFGeneratorApp(QApplication):
         self.ds = None
         self.widget = None
 
-    def setup(self):
+    def setup(self, kwargs):
         # Setup local storage for app
         self.user_data_dir = setup_storage()
         # Create datastore
@@ -74,6 +74,7 @@ class DPAMVIFGeneratorApp(QApplication):
             ds=self.ds,
             user_data_dir=self.user_data_dir,
             splash_message=self.splash_message.emit,
+            **kwargs
         )
         # Connect signals with MainWindow
         self.aboutToQuit.connect(self.widget.app_quitting)
@@ -102,5 +103,5 @@ def main(**kwargs):
     app.splash_message.connect(splash_screen.update_message)
 
     # Setup and launch
-    app.setup()
+    app.setup(kwargs)
     splash_screen.launch(app.widget.ui, on_finish=app.start)

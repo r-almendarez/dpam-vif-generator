@@ -37,7 +37,7 @@ class Progress:
         suffix: str = "",
         decimals: int = 1,
         length: int = 100,
-        fill: str = "\u2588",
+        fill: str = "+",
         printEnd: str = "\r",
     ):
         """
@@ -71,11 +71,18 @@ class Progress:
     # Value updater
     def setValue(self, value: int):
         self.printProgressBar(value)
+        if value == self.total:
+            # Print newline to close out progress bar since total has been met
+            print()
 
 
 # DPAM VIF Generator Class
 class DPAMVIFGenerator:
     def __init__(self, **kwargs):
+        # Log parameters
+        logging.info(
+            f"Initializing DPAM VIF Generator with the following parameters: {kwargs}"
+        )
         # Load arguments from user
         for key, value in kwargs.items():
             setattr(self, key, value)
@@ -87,11 +94,12 @@ class DPAMVIFGenerator:
         # Check for passed in progress emitter
         if not hasattr(self, "progress"):
             # Create script's own progress emitter
-            self.progress_object = Progress()
+            self.progress_object = Progress(100)
             self.progress = self.progress_object.setValue
 
     def generate_vif(self):
         # Set progress
+        logging.info("Generating DPAM VIF XML File...")
         self.progress(0)
 
         # Register namespaces
@@ -114,6 +122,7 @@ class DPAMVIFGenerator:
         # Write out generated XML file
         DPAMVIFGenerator.write_output_vif(input_vif, self.out_vif)
         self.progress(100)
+        logging.info("Generation Complete")
 
     @staticmethod
     def get_prefix_map() -> dict:
