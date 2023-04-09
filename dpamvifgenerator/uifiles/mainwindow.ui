@@ -366,7 +366,7 @@
          <item row="2" column="0">
           <widget class="QLabel" name="receptacle_indication_label">
            <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Calibri','sans-serif'; font-size:11pt;&quot;&gt;This field corresponds where the DisplayPort interface is presented, either Type-C Plug or Receptacle&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This field corresponds where the DisplayPort interface is presented, either Type-C Plug or Receptacle&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="text">
             <string>Receptacle Indication</string>

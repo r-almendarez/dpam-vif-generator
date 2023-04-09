@@ -99,6 +99,15 @@ class DPAMVIFGeneratorApp(QApplication):
         self.widget.quit()
         self.ds.close()
 
+    def setup_theme(self) -> str:
+        # Setup theme based on OS settings
+        qdarktheme.setup_theme("auto")
+        theme = detect_system_theme("dark")
+        # Set tool tips based on detected theme
+        if theme == "dark":
+            qdarktheme.setup_theme(additional_qss="QToolTip { border: 0px; }")
+        return theme
+
 
 def main(**kwargs):
     # Configure logging
@@ -108,8 +117,8 @@ def main(**kwargs):
 
     # Create application and splash screen
     app = DPAMVIFGeneratorApp()
-    qdarktheme.setup_theme("auto")
-    theme = detect_system_theme("dark")
+    # Set theme
+    theme = app.setup_theme()
     splash_screen = SplashScreen(
         splash_image_path=get_splash_screen_path(theme),
         timeout=0.1,
