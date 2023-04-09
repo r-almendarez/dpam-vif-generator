@@ -11,6 +11,7 @@ import os
 import platform
 import shelve
 
+import darkdetect
 import qdarktheme
 from PySide6.QtCore import Signal
 from PySide6.QtGui import QIcon
@@ -22,14 +23,25 @@ from dpamvifgenerator.gui.splashscreen import SplashScreen
 from dpamvifgenerator.utility import setup_storage
 
 
-def get_splash_screen_path():
-    root = os.path.abspath(os.path.join(__file__, "..", ".."))
-    splash_path = os.path.join(root, "assets", "splash.png")
+def detect_system_theme(default_theme: str) -> str:
+    system_theme = darkdetect.theme()
+    if system_theme is None:
+        logging.debug(
+            f'Failed to detect system theme, defaulting to "{default_theme}" theme.'
+        )
+        return default_theme
+    return system_theme.lower()
+
+
+def get_splash_screen_path(theme: str):
+    root = os.path.abspath(os.path.join(__file__, "..", "..", ".."))
+    splash_file = "vesa_logo_dark.png" if theme == "dark" else "vesa_logo_light.png"
+    splash_path = os.path.join(root, "assets", splash_file)
     return splash_path
 
 
 def get_app_icon_path():
-    root = os.path.abspath(os.path.join(__file__, "..", ".."))
+    root = os.path.abspath(os.path.join(__file__, "..", "..", ".."))
     icon_path = os.path.join(root, "assets", "generator-icon.png")
     return icon_path
 
@@ -74,7 +86,7 @@ class DPAMVIFGeneratorApp(QApplication):
             ds=self.ds,
             user_data_dir=self.user_data_dir,
             splash_message=self.splash_message.emit,
-            **kwargs
+            **kwargs,
         )
         # Connect signals with MainWindow
         self.aboutToQuit.connect(self.widget.app_quitting)
@@ -97,8 +109,11 @@ def main(**kwargs):
     # Create application and splash screen
     app = DPAMVIFGeneratorApp()
     qdarktheme.setup_theme("auto")
+    theme = detect_system_theme("dark")
     splash_screen = SplashScreen(
-        splash_image_path=get_splash_screen_path(), timeout=0.1
+        splash_image_path=get_splash_screen_path(theme),
+        timeout=0.1,
+        theme=theme,
     )
     app.splash_message.connect(splash_screen.update_message)
 

@@ -20,5 +20,6 @@ PyInstaller.__main__.run(
         "dpamvifgenerator\\uifiles\\mainwindow.ui;dpamvifgenerator\\uifiles",
         "--add-data",
         "dpamvifgenerator\\uifiles\\about.ui;dpamvifgenerator\\uifiles",
+        "--hidden-import=ctypes",
     ]
 )
