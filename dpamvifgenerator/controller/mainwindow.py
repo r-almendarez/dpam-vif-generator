@@ -351,9 +351,13 @@ class MainWindow(QMainWindow):
 
             # Create optional content root
             opt_content_root = ET.Element(
-                "opt:OptionalContent", identifier="DPAM", space="preserve"
+                "opt:OptionalContent", identifier="DPAM"
             )
+            opt_content_root.set("{http://www.w3.org/XML/1998/namespace}space", "preserve")
             component_root.append(opt_content_root)
+            opt_content_root.append(ET.Comment(";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;"))
+            opt_content_root.append(ET.Comment(";DisplayPort Alternate Mode"))
+            opt_content_root.append(ET.Comment(";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;"))
 
             # Add in tab and field elements
             for tab in tabs:

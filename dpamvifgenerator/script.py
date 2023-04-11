@@ -11,9 +11,6 @@ from xml.etree import ElementTree as ET
 
 from dpamvifgenerator.utility import XML_INDENT
 
-# Consts
-DPAM_SOP_ID = 65281  # 0xFF01
-
 
 # Exception Classes
 class MissingGeneratorArg(Exception):
@@ -149,7 +146,9 @@ class DPAMVIFGenerator:
     @staticmethod
     def load_dpam_settings(settings: str) -> ET:
         try:
-            return ET.parse(settings)
+            return ET.parse(
+                settings, parser=ET.XMLParser(target=ET.TreeBuilder(insert_comments=True))
+            )
         except Exception as e:
             error = (
                 "Error: Invalid DPAM Settings XML file provided at path: {}. {}".format(
@@ -175,6 +174,7 @@ class DPAMVIFGenerator:
                 optional_content.append(port_settings[port_name])
             else:
                 # No existing OptionalContent, so use DPAM version as is
+                port.append(ET.Comment("Non-USB Content"))
                 port.append(port_settings[port_name])
 
     @staticmethod
