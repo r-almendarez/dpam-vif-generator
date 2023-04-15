@@ -46,6 +46,11 @@ class MainWindow(QMainWindow):
         self.ui = load_ui_file(get_data_file_path("uifiles", "mainwindow.ui"))
         self.worker = None
         self.action_thread = None
+        # Get tabs from UI
+        self.tabs = [
+            self.ui.tabWidget.widget(index)
+            for index in range(self.ui.tabWidget.count())
+        ]
         # Connect Signals and Slots
         self.connect_signals_and_slots()
         # Load user supplied settings from the command line if they exist
@@ -92,23 +97,22 @@ class MainWindow(QMainWindow):
             store_label = "{}_{}".format(widget_name, port_label)
             self.save_to_store(store_label, value)
 
-        # Connect comboboxes
-        for cbb in self.ui.sop_displayport_capabilities_tab.findChildren(
-            QComboBox
-        ) + self.ui.sopp_displayport_capabilities_tab.findChildren(QComboBox):
-            cbb.currentIndexChanged.connect(
-                lambda x, cbb_name=cbb.objectName(): port_widget_changed(cbb_name, x)
-            )
-
-        # Connect checkboxes
-        for checkbox in self.ui.sop_displayport_capabilities_tab.findChildren(
-            QCheckBox
-        ):
-            checkbox.stateChanged.connect(
-                lambda x, checkbox_name=checkbox.objectName(): port_widget_changed(
-                    checkbox_name, x
+        # Connect tab controls
+        for tab in self.tabs:
+            # Connect comboboxes
+            for cbb in tab.findChildren(QComboBox):
+                cbb.currentIndexChanged.connect(
+                    lambda x, cbb_name=cbb.objectName(): port_widget_changed(
+                        cbb_name, x
+                    )
                 )
-            )
+            # Connect checkboxes
+            for checkbox in tab.findChildren(QCheckBox):
+                checkbox.stateChanged.connect(
+                    lambda x, checkbox_name=checkbox.objectName(): port_widget_changed(
+                        checkbox_name, x
+                    )
+                )
 
     def load_user_args(self, **kwargs):
         # Log parameters
@@ -134,8 +138,8 @@ class MainWindow(QMainWindow):
     def initialize_ui(self):
         # Disable UI by default until an input VIF is loaded
         self.ui.port_label_cbb.setEnabled(False)
-        self.ui.sop_displayport_capabilities_tab.setEnabled(False)
-        self.ui.sopp_displayport_capabilities_tab.setEnabled(False)
+        for tab in self.tabs:
+            tab.setEnabled(False)
 
         # Setup UI defaults
         ds_input_vif = self.get_from_store("user_path_to_input")
@@ -148,23 +152,20 @@ class MainWindow(QMainWindow):
             store_label = "{}_{}".format(widget_name, port_value)
             return self.get_from_store(store_label)
 
-        for cbb in self.ui.sop_displayport_capabilities_tab.findChildren(
-            QComboBox
-        ) + self.ui.sopp_displayport_capabilities_tab.findChildren(QComboBox):
-            cbb_index = get_port_widget_data(cbb.objectName())
-            if cbb_index:
-                cbb.setCurrentIndex(cbb_index)
-            else:
-                cbb.setCurrentIndex(0)
-
-        for checkbox in self.ui.sop_displayport_capabilities_tab.findChildren(
-            QCheckBox
-        ):
-            checkbox_state = get_port_widget_data(checkbox.objectName())
-            if checkbox_state:
-                checkbox.setCheckState(Qt.CheckState(checkbox_state))
-            else:
-                checkbox.setCheckState(Qt.CheckState.Unchecked)
+        # Update tab controls
+        for tab in self.tabs:
+            for cbb in tab.findChildren(QComboBox):
+                cbb_index = get_port_widget_data(cbb.objectName())
+                if cbb_index:
+                    cbb.setCurrentIndex(cbb_index)
+                else:
+                    cbb.setCurrentIndex(0)
+            for checkbox in tab.findChildren(QCheckBox):
+                checkbox_state = get_port_widget_data(checkbox.objectName())
+                if checkbox_state:
+                    checkbox.setCheckState(Qt.CheckState(checkbox_state))
+                else:
+                    checkbox.setCheckState(Qt.CheckState.Unchecked)
 
     def browse_input_button(self):
         # Get user input filename
@@ -196,8 +197,8 @@ class MainWindow(QMainWindow):
             self.ui.port_label_cbb.addItem(port.find("vif:Port_Label", prefix_map).text)
         # Activate UI elements
         self.ui.port_label_cbb.setEnabled(True)
-        self.ui.sop_displayport_capabilities_tab.setEnabled(True)
-        self.ui.sopp_displayport_capabilities_tab.setEnabled(True)
+        for tab in self.tabs:
+            tab.setEnabled(True)
 
     def save_as_output(self):
         # Get user output filename
@@ -335,10 +336,6 @@ class MainWindow(QMainWindow):
             self.ui.port_label_cbb.itemText(i)
             for i in range(self.ui.port_label_cbb.count())
         ]
-        tabs = [
-            self.ui.sop_displayport_capabilities_tab,
-            self.ui.sopp_displayport_capabilities_tab,
-        ]
 
         # Get current values for each port from datastore
         for port_value, port_label in enumerate(ports):
@@ -350,33 +347,32 @@ class MainWindow(QMainWindow):
             component_root.append(port_label_element)
 
             # Create optional content root
-            opt_content_root = ET.Element(
-                "opt:OptionalContent", identifier="DPAM"
+            opt_content_root = ET.Element("opt:OptionalContent", identifier="DPAM")
+            opt_content_root.set(
+                "{http://www.w3.org/XML/1998/namespace}space", "preserve"
             )
-            opt_content_root.set("{http://www.w3.org/XML/1998/namespace}space", "preserve")
             component_root.append(opt_content_root)
-            opt_content_root.append(ET.Comment(";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;"))
+            # Add DPAM Comment
+            comment_line = ";" * 78
+            opt_content_root.append(ET.Comment(comment_line))
             opt_content_root.append(ET.Comment(";DisplayPort Alternate Mode"))
-            opt_content_root.append(ET.Comment(";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;"))
+            opt_content_root.append(ET.Comment(comment_line))
 
             # Add in tab and field elements
-            for tab in tabs:
+            for tab in self.tabs:
                 tab_root = ET.Element(
                     "opt:{}".format(
                         tab.objectName().replace(" ", "_").removesuffix(UI_TAB_SUFFIX)
                     )
                 )
                 opt_content_root.append(tab_root)
-                for layout in tab.findChildren(
+                for field in tab.findChildren(
                     QWidget, options=Qt.FindChildOption.FindDirectChildrenOnly
                 ):
-                    for field in layout.findChildren(
-                        QWidget, options=Qt.FindChildOption.FindDirectChildrenOnly
-                    ):
-                        # Generate XML elements for each field
-                        element = self.generate_element(field, port_value)
-                        if element is not None:
-                            tab_root.append(element)
+                    # Generate XML elements for each field
+                    element = self.generate_element(field, port_value)
+                    if element is not None:
+                        tab_root.append(element)
 
         # Write to local file
         settings = os.path.join(self.user_data_dir, "settings_new.xml")
@@ -524,31 +520,24 @@ class MainWindow(QMainWindow):
             self.ui.port_label_cbb.itemText(i)
             for i in range(self.ui.port_label_cbb.count())
         ]
-        tabs = [
-            self.ui.sop_displayport_capabilities_tab,
-            self.ui.sopp_displayport_capabilities_tab,
-        ]
         for port_value, port_label in enumerate(ports):
             self.ui.port_label_cbb.setCurrentIndex(port_value)
             # Skip if port does not exist in port settings
             if port_label not in port_settings:
                 continue
             # Apply all fields from port settings that exist in UI
-            for tab in tabs:
+            for tab in self.tabs:
                 tab_name = self.sanitize_widget_name(tab.objectName())
-                for layout in tab.findChildren(
+                for field in tab.findChildren(
                     QWidget, options=Qt.FindChildOption.FindDirectChildrenOnly
                 ):
-                    for field in layout.findChildren(
-                        QWidget, options=Qt.FindChildOption.FindDirectChildrenOnly
-                    ):
-                        # Grab setting from port settings for field
-                        field_name = self.sanitize_widget_name(field.objectName())
-                        field_setting = port_settings[port_label].find(
-                            f".//opt:{tab_name}/opt:{field_name}", prefix_map
-                        )
-                        # Apply field setting to UI
-                        self.apply_field_setting(field, field_setting)
+                    # Grab setting from port settings for field
+                    field_name = self.sanitize_widget_name(field.objectName())
+                    field_setting = port_settings[port_label].find(
+                        f".//opt:{tab_name}/opt:{field_name}", prefix_map
+                    )
+                    # Apply field setting to UI
+                    self.apply_field_setting(field, field_setting)
         # Restore current port selection
         self.ui.port_label_cbb.setCurrentIndex(current_port)
 
