@@ -20,7 +20,7 @@ from PySide6.QtWidgets import QApplication
 from dpamvifgenerator import LOG_LEVEL_MAP, LOGGING_FORMAT, buildinfo
 from dpamvifgenerator.controller.mainwindow import MainWindow
 from dpamvifgenerator.gui.splashscreen import SplashScreen
-from dpamvifgenerator.utility import setup_storage
+from dpamvifgenerator.utility import get_asset_file_path, setup_storage
 
 
 def detect_system_theme(default_theme: str) -> str:
@@ -34,16 +34,12 @@ def detect_system_theme(default_theme: str) -> str:
 
 
 def get_splash_screen_path(theme: str):
-    root = os.path.abspath(os.path.join(__file__, "..", "..", ".."))
     splash_file = "vesa_logo_dark.png" if theme == "dark" else "vesa_logo_light.png"
-    splash_path = os.path.join(root, "assets", splash_file)
-    return splash_path
+    return get_asset_file_path("assets", splash_file)
 
 
 def get_app_icon_path():
-    root = os.path.abspath(os.path.join(__file__, "..", "..", ".."))
-    icon_path = os.path.join(root, "assets", "displayport_icon.ico")
-    return icon_path
+    return get_asset_file_path("assets", "displayport_icon.ico")
 
 
 def setup_os():

@@ -956,7 +956,6 @@
     <property name="title">
      <string>Help</string>
     </property>
-    <addaction name="separator"/>
     <addaction name="action_about"/>
    </widget>
    <addaction name="menuFile"/>

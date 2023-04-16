@@ -8,6 +8,8 @@
 ######################################################
 import errno
 import os
+import platform
+import subprocess
 
 import appdirs
 from PySide6.QtCore import QFile, QIODevice
@@ -35,6 +37,12 @@ def setup_storage() -> str:
     return user_data_dir
 
 
+def get_asset_file_path(dir_name: str, file_name: str) -> str:
+    """Get the path to an asset file to be used by app"""
+    root = os.path.abspath(os.path.join(__file__, "..", "..", ".."))
+    return os.path.join(root, dir_name, file_name)
+
+
 def get_data_file_path(dir_name: str, file_name: str) -> str:
     """Get the path to a data file to be used by app"""
     root = os.path.abspath(os.path.join(__file__, "..", ".."))
@@ -54,3 +62,14 @@ def load_ui_file(ui_file_path: str) -> QWidget:
         print(loader.errorString())
         raise
     return window
+
+
+def open_file_native(file_path: str):
+    """Opens a file using the OS's default application"""
+    platform_system = platform.system()
+    if platform_system == "Darwin":  # macOS
+        subprocess.call(("open", file_path))
+    elif platform_system == "Windows":  # Windows
+        os.startfile(file_path)
+    else:  # Linux variants
+        subprocess.call(("xdg-open", file_path))

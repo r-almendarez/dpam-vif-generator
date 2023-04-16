@@ -6,12 +6,14 @@
 # IMPLIED WARRANTIES OF FITNESS FOR A PARTICULAR
 # PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 ######################################################
+import glob
 import logging
 import os
 import shutil
 from xml.etree import ElementTree as ET
 
 from PySide6.QtCore import Qt, QThread, Signal
+from PySide6.QtGui import QAction
 from PySide6.QtWidgets import (
     QCheckBox,
     QComboBox,
@@ -24,7 +26,13 @@ from PySide6.QtWidgets import (
 
 from dpamvifgenerator import buildinfo, script
 from dpamvifgenerator.controller.about import AboutDialog
-from dpamvifgenerator.utility import XML_INDENT, get_data_file_path, load_ui_file
+from dpamvifgenerator.utility import (
+    XML_INDENT,
+    get_asset_file_path,
+    get_data_file_path,
+    load_ui_file,
+    open_file_native,
+)
 from dpamvifgenerator.utility.worker import Worker
 
 # Globals
@@ -76,6 +84,7 @@ class MainWindow(QMainWindow):
         self.ui.action_export_settings.triggered.connect(self.export_settings)
         self.ui.action_import_settings.triggered.connect(self.import_settings)
         self.ui.action_about.triggered.connect(self.show_about)
+        self.link_dpam_spec()
 
         # Connect buttons
         self.ui.browse_input_button.clicked.connect(self.browse_input_button)
@@ -134,6 +143,21 @@ class MainWindow(QMainWindow):
             self.populate_settings_from_input_xml(filename)
         except Exception:
             pass
+
+    def link_dpam_spec(self):
+        # Look in assets for files that look like the DPAM VIF Spec
+        pdfs = glob.glob(get_asset_file_path("assets", "DPAM_VIF_Spec*.pdf"))
+        # Add PDF files to Help menu
+        for pdf in pdfs:
+            pdf_name = os.path.basename(pdf)
+            pdf_action = QAction(pdf_name, self)
+            pdf_action.setStatusTip("View the DPAM VIF Specification")
+            pdf_action.triggered.connect(
+                lambda x=False, this_pdf=pdf: self.open_vif_spec(x, this_pdf)
+            )
+            self.ui.menuHelp.insertAction(self.ui.action_about, pdf_action)
+        if pdfs:
+            self.ui.menuHelp.insertSeparator(self.ui.action_about)
 
     def initialize_ui(self):
         # Disable UI by default until an input VIF is loaded
@@ -583,3 +607,6 @@ class MainWindow(QMainWindow):
     def show_about(self):
         about_dialog = AboutDialog(self)
         about_dialog.show()
+
+    def open_vif_spec(self, checked: bool, file_path: str):
+        open_file_native(file_path)
