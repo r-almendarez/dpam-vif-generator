@@ -7,7 +7,7 @@
 # PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 ######################################################
 """Build and version information"""
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 __company__ = "VESA DPAM WG"
 __product__ = "DPAM VIF Generator"
 __bundle__ = (
@@ -16,5 +16,5 @@ __bundle__ = (
     .replace(" ", "-")
 )
 """Developed with respect to the following specification versions"""
-__dpam_vif_spec_version__ = "0.1.0"
+__dpam_vif_spec_version__ = "0.2.0"
 __usbif_vif_spec_version__ = "3.4.5.0"
